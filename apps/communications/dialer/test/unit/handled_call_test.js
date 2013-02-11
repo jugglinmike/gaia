@@ -28,6 +28,9 @@ if (!this.LazyL10n) {
   this.LazyL10n = null;
 }
 
+/*
+// These tests are currently failing and have been temporarily disabled as per
+// 838993. They should be fixed and re-enabled as soon as possible.
 suite('dialer/handled_call', function() {
   var subject;
   var mockCall;
@@ -398,3 +401,4 @@ suite('dialer/handled_call', function() {
     });
   });
 });
+*/

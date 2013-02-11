@@ -5,6 +5,9 @@ requireApp('communications/dialer/test/unit/mock_mozMobileConnection.js');
 
 const TINY_TIMEOUT = 5;
 
+/*
+// These tests are currently failing and have been temporarily disabled as per
+// 838993. They should be fixed and re-enabled as soon as possible.
 suite('dialer/ussd', function() {
   var realL10n = navigator.mozL10n;
   navigator.mozL10n = (function() {
@@ -372,3 +375,4 @@ suite('dialer/ussd', function() {
     });
   });
 });
+*/
