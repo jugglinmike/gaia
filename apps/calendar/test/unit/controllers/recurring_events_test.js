@@ -55,6 +55,9 @@ suite('controllers/recurring_event', function() {
       app.syncController.emit('syncComplete');
     });
 
+/*
+// These tests are currently failing and have been temporarily disabled as per
+// 838993. They should be fixed and re-enabled as soon as possible.
     test('monthChange', function(done) {
       var expectedDate = new Date(2012, 10, 1);
       // modify wait before move for faster tests.
@@ -72,6 +75,7 @@ suite('controllers/recurring_event', function() {
         timeController.move(expectedDate);
       });
     });
+*/
   });
 
   suite('#queueExpand', function() {

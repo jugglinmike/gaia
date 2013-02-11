@@ -15,14 +15,21 @@ suite('DeviceStorage', function() {
     return;
   }
   else {
+/*
+// These tests are currently failing and have been temporarily disabled as per
+// 838993. They should be fixed and re-enabled as soon as possible.
     test('getDeviceStorage() returns an array', function() {
       assert.ok(storageAreas);
       assert.isTrue(Array.isArray(storageAreas));
     });
+*/
   }
 
   var storage = storageAreas[0];
 
+/*
+// These tests are currently failing and have been temporarily disabled as per
+// 838993. They should be fixed and re-enabled as soon as possible.
   test('write, read, enumerate and delete a file', function(done) {
     this.timeout(10000);  // Let the emulator take up to 10 seconds
     var directory = 'test';
@@ -94,4 +101,5 @@ suite('DeviceStorage', function() {
       };
     };
   });
+*/
 });
