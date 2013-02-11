@@ -10,31 +10,33 @@ const TINY_TIMEOUT = 5;
 // 838993. They should be fixed and re-enabled as soon as possible.
 suite('dialer/ussd', function() {
   var realL10n = navigator.mozL10n;
-  navigator.mozL10n = (function() {
-    var keys = {};
 
-    function reset() {
-      keys = {};
-    }
+  setup(function() {
+    navigator.mozL10n = (function() {
+      var keys = {};
 
-    function get(key, params) {
-      keys[key] = params;
-      return key;
-    }
+      function reset() {
+        keys = {};
+      }
 
-    function getKeys() {
-      return keys;
-    }
+      function get(key, params) {
+        keys[key] = params;
+        return key;
+      }
 
-    return {
-      get: get,
-      reset: reset,
-      keys: getKeys
-    };
-  })();
+      function getKeys() {
+        return keys;
+      }
+
+      return {
+        get: get,
+        reset: reset,
+        keys: getKeys
+      };
+    })();
+  });
 
   suiteSetup(function() {
-    navigator.mozL10n.reset();
     UssdManager._conn = MockMozMobileConnection;
     UssdManager.init();
     UssdManager._popup = MockUssdUI;
