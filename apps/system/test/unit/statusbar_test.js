@@ -17,9 +17,6 @@ mocksForStatusBar.forEach(function(mockName) {
   }
 });
 
-/*
-// These tests are currently failing and have been temporarily disabled as per
-// They should be fixed and re-enabled as soon as possible.
 suite('system/Statusbar', function() {
   var fakeStatusBarNode;
   var mocksHelper;
@@ -55,6 +52,9 @@ suite('system/Statusbar', function() {
 
     StatusBar.ELEMENTS.forEach(function testAddElement(elementName) {
       var elt = document.createElement('div');
+      if (elementName === "network-activity" || elementName === "system-downloads") {
+        elt = document.createElement('canvas');
+      }
       elt.id = 'statusbar-' + elementName;
       elt.hidden = true;
       fakeStatusBarNode.appendChild(elt);
@@ -97,11 +97,7 @@ suite('system/Statusbar', function() {
       assert.isTrue(fakeIcons['system-downloads'].hidden);
     });
 
-*/
     /* JW: testing that we can't have a negative counter */
-/*
-// These tests are currently failing and have been temporarily disabled as per
-// They should be fixed and re-enabled as soon as possible.
     test('incrementing then decrementing twice then incrementing should ' +
          'display the icon', function() {
       StatusBar.incSystemDownloads();
@@ -426,4 +422,3 @@ suite('system/Statusbar', function() {
     });
   });
 });
-*/
