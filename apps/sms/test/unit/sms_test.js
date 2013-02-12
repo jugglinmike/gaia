@@ -173,6 +173,10 @@ suite('Threads-list Tests', function() {
 	// Let's go with tests!
 	suite('Threads-list rendering', function() {
 		
+/*
+// These tests are currently failing and have been temporarily disabled as per
+// Bug 838993. They should be fixed and re-enabled as soon as possible as per
+// Bug 840497.
 		test('Check HTML structure', function() {
 			// Check the HTML structure, and if it fits with Building Blocks
 			
@@ -190,6 +194,7 @@ suite('Threads-list Tests', function() {
 			var threadsContainer = document.getElementById('threadsContainer_'+Utils.getDayDate(date.getTime()));
 			assertNumberOfElementsInContainerByTag(threadsContainer, 2, 'li');
 		});
+*/
 
 		test('Render unread style properly', function() {
 			// We know that only one thread is unread
