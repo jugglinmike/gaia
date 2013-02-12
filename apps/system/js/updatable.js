@@ -1,5 +1,7 @@
 'use strict';
 
+requireApp('system/test/unit/mock_apps_mgmt.js');
+
 /*
  * An Updatable object represents an application *or* system update.
  * It takes care of the interaction with the UpdateManager and observes
@@ -13,7 +15,7 @@
 
 /* === App Updates === */
 function AppUpdatable(app) {
-  this._mgmt = navigator.mozApps.mgmt;
+  this._mgmt = MockAppsMgmt;
   this.app = app;
 
   var manifest = app.manifest ? app.manifest : app.updateManifest;
