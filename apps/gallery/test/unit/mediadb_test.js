@@ -50,7 +50,9 @@ suite('MediaDB', function() {
   function clearDirectory(directory, callback) {
     var storage = navigator.getDeviceStorage('pictures');
     var cursor = storage.enumerate(directory);
+    console.log("?", cursor);
     cursor.onsuccess = function() {
+      console.log("!");
       var file = cursor.result;
       if (file) {
         storage.delete(directory + cursor.result.name).onsuccess = function() {
@@ -61,10 +63,12 @@ suite('MediaDB', function() {
         callback();
       }
     };
-    cursor.onerror = callback;
+    cursor.onerror = function() {
+      console.log("E!");
+      callback();
+    };
   }
 
-/*
 // These tests are currently failing and have been temporarily disabled as per
 // Bug 838993. They should be fixed and re-enabled as soon as possible as per
 // Bug 840493.
@@ -87,8 +91,8 @@ suite('MediaDB', function() {
                  .sort()
                  .join(' '),
                  'addEventListener addFile cancelEnumeration close count ' +
-                 'deleteFile enumerate getFile removeEventListener ' +
-                 'updateMetadata');
+                 'deleteFile enumerate enumerateAll freeSpace getAll ' +
+                 'getFile removeEventListener scan updateMetadata');
 
   });
 
@@ -101,6 +105,7 @@ suite('MediaDB', function() {
 
     var testGenerator = (function() {
       // make sure the directory is empty
+      var t = new Date().getTime();
       yield clearDirectory(directory, continueTest);
 
       // Create the test files one at a time
@@ -161,6 +166,7 @@ suite('MediaDB', function() {
     continueTest();
   });
 
+/*
   // Test created and deleted events when creating and deleting files
   // one at a time using device storage externally.
   // And also test enumeration methods
