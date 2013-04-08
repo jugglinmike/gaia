@@ -1,6 +1,7 @@
 const InputMethods = {}; // latin.js expects this to be defined
 var im; // this will hold the input method we're testing
 
+//requireApp('keyboard/test/unit/mock_keyboard.js');
 requireApp('keyboard/js/imes/latin/latin.js', function() {
   init();
 });
