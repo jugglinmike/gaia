@@ -1,5 +1,76 @@
 require('/shared/js/mediadb.js');
 
+(function(window, undefined) {
+
+  var getDeviceStorage = function(loc) {
+    if (inst[loc]) {
+      return inst[loc];
+    }
+    inst[loc] = new DeviceStorage(loc);
+    return inst[loc];
+  };
+
+  var inst = getDeviceStorage._instances = {};
+
+  var DeviceStorage = function(loc) {
+    this._loc = loc;
+    this._files = {};
+  };
+
+  DeviceStorage.prototype.addNamed = function(blob, fileName) {
+    var cursor = {};
+
+    this._files[fileName] = blob;
+
+    setTimeout(function() {
+      cursor.result = {};
+      if (typeof cursor.onsuccess === "function") {
+        cursor.onsuccess();
+      }
+    }, 0);
+    return cursor;
+  };
+
+  DeviceStorage.prototype.enumerate = function(directory) {
+    var cursor = {};
+
+    var fileNames = Object.keys(this._files);
+
+    this._enumerateNext(cursor, fileNames);
+
+    return cursor;
+  };
+
+  DeviceStorage.prototype._enumerateNext = function(cursor, files) {
+    setTimeout(function() {
+      if (files.length) {
+        cursor.result = { name: files.shift() };
+      } else {
+        delete cursor.result;
+      }
+      cursor.continue = this._enumerateNext.bind(this, cursor, files);
+      if (typeof cursor.onsuccess === "function") {
+        cursor.onsuccess();
+      }
+    }.bind(this), 0);
+  };
+
+  DeviceStorage.prototype.delete = function(loc) {
+    var cursor = {};
+
+    setTimeout(function() {
+      cursor.result = {};
+      if (typeof cursor.onsuccess === "function") {
+        cursor.onsuccess();
+      }
+    }, 0);
+    return cursor;
+  };
+
+  window.mockGetDeviceStorage = getDeviceStorage;
+
+}(this));
+
 suite('MediaDB', function() {
   if (navigator.getDeviceStorage('pictures') == null) {
     test('navigator.getDeviceStorage() returns null on this platform; ' +
@@ -23,7 +94,7 @@ suite('MediaDB', function() {
 
   // Create a fake png file
   function createFile(directory, name, content, callback) {
-    var storage = navigator.getDeviceStorage('pictures');
+    var storage = mockGetDeviceStorage('pictures');
     var blob = new Blob([JSON.stringify(content)], {type: 'image/png'});
     storage.addNamed(blob, directory + name).onsuccess = function() {
       if (callback) callback();
@@ -31,7 +102,7 @@ suite('MediaDB', function() {
   }
 
   function deleteFile(directory, name, callback) {
-    var storage = navigator.getDeviceStorage('pictures');
+    var storage = mockGetDeviceStorage('pictures');
     storage.delete(directory + name).onsuccess = function() {
       if (callback) callback();
     };
@@ -48,7 +119,7 @@ suite('MediaDB', function() {
 
   // Delete all files from a directory
   function clearDirectory(directory, callback) {
-    var storage = navigator.getDeviceStorage('pictures');
+    var storage = mockGetDeviceStorage('pictures');
     var cursor = storage.enumerate(directory);
     console.log("?", cursor);
     cursor.onsuccess = function() {

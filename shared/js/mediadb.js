@@ -474,6 +474,7 @@ var MediaDB = (function() {
       // If storage is null, then there is no sdcard installed and
       // we have to abort.
       media.storage = navigator.getDeviceStorage(mediaType);
+      media.storage = mockGetDeviceStorage(mediaType);
 
       // Handle change notifications from device storage
       // We set this onchange property to null in the close() method
