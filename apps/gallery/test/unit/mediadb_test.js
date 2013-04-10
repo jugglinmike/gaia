@@ -64,7 +64,6 @@ suite('MediaDB', function() {
     cursor.onerror = callback;
   }
 
-/*
 // These tests are currently failing and have been temporarily disabled as per
 // Bug 838993. They should be fixed and re-enabled as soon as possible as per
 // Bug 840493.
@@ -87,8 +86,8 @@ suite('MediaDB', function() {
                  .sort()
                  .join(' '),
                  'addEventListener addFile cancelEnumeration close count ' +
-                 'deleteFile enumerate getFile removeEventListener ' +
-                 'updateMetadata');
+                 'deleteFile enumerate enumerateAll freeSpace getAll ' +
+                 'getFile removeEventListener scan updateMetadata');
 
   });
 
@@ -161,6 +160,7 @@ suite('MediaDB', function() {
     continueTest();
   });
 
+/*
   // Test created and deleted events when creating and deleting files
   // one at a time using device storage externally.
   // And also test enumeration methods
