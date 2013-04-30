@@ -270,6 +270,11 @@ var ThreadListUI = {
     // Retrieving params from thread
     var bodyText = (thread.body || '').split('\n')[0];
     var bodyHTML = Utils.Message.format(bodyText);
+
+    // Since MMS messages have mixed content, simply render an attachment icon
+    if (thread.lastMessageType === 'mms') {
+      bodyHTML = '{{ attachment icon here }}';
+    }
     var formattedDate = Utils.getFormattedHour(timestamp);
     // Create HTML Structure
     var structureHTML = '<label class="danger">' +
