@@ -312,14 +312,14 @@ section[role="region"].new > header:first-child form {
 
 #messages-container[data-type="list"] li.bubble a {
   height: 100%;
-  text-align: right;
   overflow: visible;
-  white-space: normal;
   border-radius: 0.3rem 0.3rem 0.3rem 0.3rem;
   background: #fff;
-  font-size: 1.9rem;
-  line-height: 2.2rem;
   float: right;
+  /* Prevent text content from rendering underneath the absolutely-positioned
+   * aside.
+   * TODO: Render the aside within the layout using flexbox. */
+  padding-right: 5rem;
 }
 
 #messages-container[data-type="list"] li.bubble .received {
@@ -338,16 +338,21 @@ section[role="region"].new > header:first-child form {
 #messages-container[data-type="list"] li.bubble .error aside.pack-end {
   background: url('images/icons/exclamation.png') no-repeat center center;
   background-size: 2.2rem;
-  width: 3.2rem;
-  height: 4.5rem;
 }
+
 #messages-container[data-type="list"] li.bubble aside progress {
-  margin-top: 0.4rem;
+  height: 100%;
 }
 
 #messages-container[data-type="list"] li.bubble aside {
   overflow: hidden;
-  position: static;
+  width: 5rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: auto;
+  text-align: center;
 }
 
 #messages-container[data-type="list"] li.bubble p {
@@ -355,6 +360,8 @@ section[role="region"].new > header:first-child form {
   position: relative;
   text-align: left;
   display: inline-block;
+  line-height: 2.2rem;
+  white-space: normal;
 }
 
 /*
