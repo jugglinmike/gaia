@@ -268,6 +268,7 @@ var ThreadListUI = {
     var timestamp = thread.timestamp.getTime();
     var threadDOM = document.createElement('li');
     threadDOM.id = 'thread_' + thread.id;
+    threadDOM.dataset.lastMessageType = thread.lastMessageType;
     threadDOM.dataset.time = timestamp;
     threadDOM.dataset.phoneNumber = num;
 
@@ -275,10 +276,6 @@ var ThreadListUI = {
     var bodyText = (thread.body || '').split('\n')[0];
     var bodyHTML = Utils.Message.format(bodyText);
 
-    // Since MMS messages have mixed content, simply render an attachment icon
-    if (thread.lastMessageType === 'mms') {
-      bodyHTML = '{{ attachment icon here }}';
-    }
     // Create HTML Structure
     var structureHTML = this.tmpl.thread.interpolate({
       num: num,

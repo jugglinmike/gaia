@@ -63,6 +63,11 @@ form[role="dialog"][data-type="edit"] header menu[type="toolbar"] button {
   text-align: left;
 }
 
+[data-type="list"] [data-last-message-type="mms"] .body-text {
+  background-image: url('');
+  background-repeat: no-repeat;
+}
+
 [data-type="list"] header {
   margin: 0 1.5rem;
   padding: 0.5rem 1.5rem;
