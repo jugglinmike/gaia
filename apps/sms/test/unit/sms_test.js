@@ -173,6 +173,11 @@ suite('SMS App Unit-Test', function() {
         assertNumberOfElementsInContainerByTag(container, 4, 'li');
         assertNumberOfElementsInContainerByTag(container, 4, 'a');
 
+        var mmsThreads = container.querySelectorAll('[data-last-message-type="mms"]');
+        var smsThreads = container.querySelectorAll('[data-last-message-type="sms"]');
+        assert.equal(mmsThreads.length, 1);
+        assert.equal(smsThreads.length, 3);
+
         // In our mockup we shoul group the threads following day criteria
         // In the second group, we should have 2 threads
         var date = getMockupedDate(2);
