@@ -323,6 +323,65 @@ suite('thread_ui.js >', function() {
       });
     });
   });
+
+  suite('message status update handlers >', function() {
+    suiteSetup(function() {
+      this.prevBody = document.body.innerHTML;
+      loadBodyHTML('/index.html');
+      this.fakeMessage = {
+        id: 24601
+      };
+      this.container = document.createElement('div');
+      this.container.id = 'message-' + this.fakeMessage.id;
+      document.body.appendChild(this.container);
+    });
+    suiteTeardown(function() {
+      document.body.innerHTML = this.prevBody;
+    });
+    setup(function() {
+      this.container.className = 'sending';
+      this.container.innerHTML = ThreadUI.tmpl.message.interpolate({});
+    });
+
+    suite('onMessageSent >', function() {
+      test('removes the "sending" class from the message element', function() {
+        ThreadUI.onMessageSent(this.fakeMessage);
+        assert.isFalse(this.container.classList.contains('sending'));
+      });
+      test('adds the "sent" class to the message element', function() {
+        ThreadUI.onMessageSent(this.fakeMessage);
+        assert.isTrue(this.container.classList.contains('sent'));
+      });
+    });
+
+    suite('onMessageFailed >', function() {
+      suite('messages that were *not* previously in the "error" state >',
+        function() {
+        test('removes the "sending" class from the message element',
+          function() {
+          ThreadUI.onMessageFailed(this.fakeMessage);
+          assert.isFalse(this.container.classList.contains('sending'));
+        });
+        test('adds the "error" class to the message element', function() {
+          ThreadUI.onMessageFailed(this.fakeMessage);
+          assert.isTrue(this.container.classList.contains('error'));
+        });
+      });
+      suite('messages that were previously in the "error" state >',
+        function() {
+        setup(function() {
+          this.container.classList.add('error');
+        });
+        test('does not remove the "sending" class to the message element',
+          function() {
+          ThreadUI.onMessageFailed(this.fakeMessage);
+          assert.isTrue(this.container.classList.contains('sending'));
+        });
+      });
+    });
+
+  });
+
   suite('createMmsContent', function() {
     test('generated html', function() {
       var inputArray = [{
