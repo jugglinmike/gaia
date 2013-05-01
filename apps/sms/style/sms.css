@@ -81,6 +81,8 @@ form[role="dialog"][data-type="edit"] header menu[type="toolbar"] button {
   display: block;
   overflow: hidden;
   right: 5rem;
+  transform: translateX(0);
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 [data-type="list"] aside.icon-unread {
@@ -109,8 +111,7 @@ form[role="dialog"][data-type="edit"] header menu[type="toolbar"] button {
 .edit [data-type="list"] li > label {
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(5rem);
-  transition: all 0.3s ease;
+  transform: translateX(7rem);
 }
 
 .edit [data-type="list"] li > a > aside.icon-unread {
@@ -313,18 +314,27 @@ section[role="region"].new > header:first-child form {
 #messages-container[data-type="list"] li.bubble a {
   height: 100%;
   overflow: visible;
-  border-radius: 0.3rem 0.3rem 0.3rem 0.3rem;
   background: #fff;
-  float: right;
+}
+
+#messages-container[data-type="list"] li.bubble a.outgoing {
   /* Prevent text content from rendering underneath the absolutely-positioned
    * aside.
    * TODO: Render the aside within the layout using flexbox. */
   padding-right: 5rem;
+  float: right;
+  border-radius: 0.3rem 0 0 0.3rem;
+  border-right-width: 0;
+  margin-left: 2rem;
+  transition: margin-left 0.3s ease 0s;
 }
 
-#messages-container[data-type="list"] li.bubble .received {
+#messages-container[data-type="list"] li.bubble a.incoming {
   float: left;
+  border-radius: 0 0.3rem 0.3rem 0;
   background: #FCC987;
+  padding-left: 2rem;
+  transition: padding-left 0.3s ease 0s;
 }
 
 #messages-container[data-type="list"] li.bubble .sending {
@@ -332,7 +342,9 @@ section[role="region"].new > header:first-child form {
 }
 
 #messages-container[data-type="list"] li.bubble .error {
-  border: 0.1rem solid #B90000;
+  border-color: #B90000;
+  border-width: 0.1rem;
+  border-style: solid;
 }
 
 #messages-container[data-type="list"] li.bubble .error aside.pack-end {
@@ -359,7 +371,6 @@ section[role="region"].new > header:first-child form {
   padding: 1rem;
   position: relative;
   text-align: left;
-  display: inline-block;
   line-height: 2.2rem;
   white-space: normal;
 }
@@ -384,9 +395,12 @@ section[role="region"].new > header:first-child form {
   transform: translateX(0);
 }
 
-.edit #messages-container[data-type="list"] li .received p {
-  transform: translateX(4rem);
-  transition: all 0.3s ease 0s;
+.edit #messages-container[data-type="list"] li.bubble .outgoing {
+  margin-left: 7rem;
+}
+
+.edit #messages-container[data-type="list"] li.bubble .incoming {
+  padding-left: 7rem;
 }
 
 .edit #messages-container[data-type="list"] li.selected p {
