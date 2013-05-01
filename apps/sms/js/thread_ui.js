@@ -785,7 +785,13 @@ var ThreadUI = global.ThreadUI = {
     var delivery = message.delivery;
     var messageDOM = document.createElement('li');
 
-    messageDOM.classList.add('bubble');
+    var classNames = ['message', delivery];
+    if (delivery === 'received') {
+      classNames.push('incoming');
+    } else {
+      classNames.push('outgoing');
+    }
+    messageDOM.className = classNames.join(' ');
 
     if (hidden) {
       messageDOM.classList.add('hidden');
@@ -811,7 +817,7 @@ var ThreadUI = global.ThreadUI = {
                       '<input type="checkbox" value="' + inputValue + '">' +
                       '<span></span>' +
                       '</label>' +
-                    '<a class="' + delivery + '">';
+                    '<a class="bubble">';
     messageHTML += asideHTML;
     messageHTML += '<p></p></a>';
     messageDOM.innerHTML = messageHTML;
