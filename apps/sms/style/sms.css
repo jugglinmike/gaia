@@ -275,7 +275,7 @@ section[role="region"].new > header:first-child form {
 }
 
 #messages-container header {
-  border-bottom: 0.1rem solid #A6A6A6;
+  border-bottom: none;
   color: #606060;
   font-size: 1.3rem;
   margin: 0 1.5rem 1rem;
