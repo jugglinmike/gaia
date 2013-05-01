@@ -13,6 +13,16 @@
   var MockNavigatormozMobileMessage =
         window.DesktopMockNavigatormozMobileMessage = {};
 
+  // Utility method to create Blobs from base64-encoded content
+  function createBlob(b64data, contentType) {
+    var bytesAsCharacters = atob(b64data);
+    var byteValueArray = Array.prototype.map.call(bytesAsCharacters, function(char) {
+      return char.charCodeAt(0);
+    });
+    var uint8Data = new Uint8Array(byteValueArray);
+    return new Blob([uint8Data], {type: contentType});
+  }
+
   // Fake in-memory message database
   var messagesDb = {
     id: 0,
@@ -47,7 +57,13 @@
         threadId: 3,
         sender: null,
         receiver: '197743697',
-        body: 'Nothing :)',
+        type: 'mms',
+        smil: '<smil><head><layout><root-layout width="320px" height="480px"/><region id="Image" left="0px" top="0px" width="320px" height="320px" fit="meet"/><region id="Pic" left="0px" top="320px" width="320px" height="160px" fit="meet"/></layout></head><body><par dur="5000ms"><img src="img_0.txt" region="Pic"/></par></body></smil>',
+        attachments: [{
+          content: createBlob('R0lGODlhEAAOALMAAOazToeHh0tLS/7LZv/0jvb29t/f3//Ub//ge8WSLf/rhf/3kdbW1mxsbP//mf///yH5BAAAAAAALAAAAAAQAA4AAARe8L1Ekyky67QZ1hLnjM5UUde0ECwLJoExKcppV0aCcGCmTIHEIUEqjgaORCMxIC6e0CcguWw6aFjsVMkkIr7g77ZKPJjPZqIyd7sJAgVGoEGv2xsBxqNgYPj/gAwXEQA7', 'image/gif'),
+          id: "<img_0.txt>",
+          location: "img_0.txt"
+        }],
         delivery: 'sent',
         timestamp: new Date(Date.now() - 652800000)
       },
@@ -88,6 +104,7 @@
       {
         id: 1,
         participants: ['1977'],
+        lastMessageType: 'sms',
         body: 'Alo, how are you today, my friend? :)',
         timestamp: new Date(Date.now()),
         unreadCount: 0
@@ -95,6 +112,7 @@
       {
         id: 2,
         participants: ['436797'],
+        lastMessageType: 'sms',
         body: 'Sending :)',
         timestamp: new Date(Date.now() - 172800000),
         unreadCount: 0
@@ -102,13 +120,15 @@
       {
         id: 3,
         participants: ['197743697'],
-        body: 'Nothing :)',
+        lastMessageType: 'mms',
+        body: undefined,
         timestamp: new Date(Date.now() - 652800000),
         unreadCount: 0
       },
       {
         id: 4,
         participants: ['197746797'],
+        lastMessageType: 'sms',
         body: 'Recibido!',
         timestamp: new Date(Date.now() - 50000000),
         unreadCount: 0
@@ -116,6 +136,7 @@
       {
         id: 5,
         participants: ['14886783487'],
+        lastMessageType: 'sms',
         body: 'Hello world!',
         timestamp: new Date(Date.now() - 60000000),
         unreadCount: 2
