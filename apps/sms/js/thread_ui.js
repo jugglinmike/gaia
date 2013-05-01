@@ -732,14 +732,13 @@ var ThreadUI = {
     var delivery = message.delivery;
     var messageDOM = document.createElement('li');
 
-    messageDOM.classList.add('bubble');
-
-    var classNames = [delivery];
+    var classNames = ['message', delivery];
     if (delivery === 'received') {
       classNames.push('incoming');
     } else {
       classNames.push('outgoing');
     }
+    messageDOM.className = classNames.join(' ');
 
     if (hidden) {
       messageDOM.classList.add('hidden');
@@ -764,7 +763,7 @@ var ThreadUI = {
                       '<input type="checkbox" value="' + inputValue + '">' +
                       '<span></span>' +
                       '</label>' +
-                    '<a class="' + classNames.join(' ') + '">';
+                    '<a class="bubble">';
     messageHTML += asideHTML;
     messageHTML += '<p></p></a>';
     messageDOM.innerHTML = messageHTML;

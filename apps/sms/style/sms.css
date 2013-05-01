@@ -288,7 +288,7 @@ section[role="region"].new > header:first-child form {
   margin-bottom: 7rem;
 }
 
-#messages-container[data-type="list"] li.bubble {
+#messages-container[data-type="list"] .message {
   border-bottom: 0.1rem solid transparent;
   display: block;
   overflow: hidden;
@@ -299,7 +299,7 @@ section[role="region"].new > header:first-child form {
   height: auto;
 }
 
-#messages-container[data-type="list"] li.hidden {
+#messages-container[data-type="list"] .message.hidden {
   display: none;
 }
 
@@ -307,29 +307,27 @@ section[role="region"].new > header:first-child form {
   display: none;
 }
 
-#messages-container[data-type="list"] li.bubble:first-child {
+#messages-container[data-type="list"] .message:first-child {
   padding: 0 0 0.5rem 0;
 }
 
-#messages-container[data-type="list"] li.bubble a {
+#messages-container[data-type="list"] .message .bubble {
   height: 100%;
   overflow: visible;
   background: #fff;
 }
 
-#messages-container[data-type="list"] li.bubble a.outgoing {
+#messages-container[data-type="list"] .message.outgoing .bubble {
   /* Prevent text content from rendering underneath the absolutely-positioned
    * aside.
    * TODO: Render the aside within the layout using flexbox. */
   padding-right: 5rem;
   float: right;
-  border-radius: 0.3rem 0 0 0.3rem;
-  border-right-width: 0;
   margin-left: 2rem;
   transition: margin-left 0.3s ease 0s;
 }
 
-#messages-container[data-type="list"] li.bubble a.incoming {
+#messages-container[data-type="list"] .message.incoming .bubble {
   float: left;
   border-radius: 0 0.3rem 0.3rem 0;
   background: #FCC987;
@@ -337,26 +335,21 @@ section[role="region"].new > header:first-child form {
   transition: padding-left 0.3s ease 0s;
 }
 
-#messages-container[data-type="list"] li.bubble .sending {
+#messages-container[data-type="list"] .message.sending .bubble {
   color: #5f5f5f;
 }
 
-#messages-container[data-type="list"] li.bubble .error {
+#messages-container[data-type="list"] .message.error .bubble {
   border-color: #B90000;
   border-width: 0.1rem;
   border-style: solid;
 }
 
-#messages-container[data-type="list"] li.bubble .error aside.pack-end {
-  background: url('images/icons/exclamation.png') no-repeat center center;
-  background-size: 2.2rem;
+#messages-container[data-type="list"] .message.error.outgoing .bubble {
+  border-right-width: 0;
 }
 
-#messages-container[data-type="list"] li.bubble aside progress {
-  height: 100%;
-}
-
-#messages-container[data-type="list"] li.bubble aside {
+#messages-container[data-type="list"] .message .bubble aside {
   overflow: hidden;
   width: 5rem;
   position: absolute;
@@ -367,7 +360,16 @@ section[role="region"].new > header:first-child form {
   text-align: center;
 }
 
-#messages-container[data-type="list"] li.bubble p {
+#messages-container[data-type="list"] .message.error .bubble aside.pack-end {
+  background: url('images/icons/exclamation.png') no-repeat center center;
+  background-size: 2.2rem;
+}
+
+#messages-container[data-type="list"] .message .bubble aside progress {
+  height: 100%;
+}
+
+#messages-container[data-type="list"] .message .bubble p {
   padding: 1rem;
   position: relative;
   text-align: left;
@@ -379,40 +381,28 @@ section[role="region"].new > header:first-child form {
   Styles for Edit mode in Messages Container
 */
 
-.edit #messages-container[data-type="list"] li {
+.edit #messages-container[data-type="list"] .message {
   border-color: #e7e7e7;
 }
 
-.edit #messages-container[data-type="list"] li:last-child {
+.edit #messages-container[data-type="list"] .message:last-child {
   border-color: transparent;
 }
 
-.edit [data-type="list"] li a {
+.edit [data-type="list"] .message .bubble {
   pointer-events: none;
 }
 
-.edit #messages-container[data-type="list"] li p {
+.edit #messages-container[data-type="list"] .message p {
   transform: translateX(0);
 }
 
-.edit #messages-container[data-type="list"] li.bubble .outgoing {
+.edit #messages-container[data-type="list"] .message.outgoing .bubble {
   margin-left: 7rem;
 }
 
-.edit #messages-container[data-type="list"] li.bubble .incoming {
+.edit #messages-container[data-type="list"] .message.incoming .bubble {
   padding-left: 7rem;
-}
-
-.edit #messages-container[data-type="list"] li.selected p {
-  border: 0.2rem solid #B90000;
-}
-
-.edit #messages-container[data-type="list"] li.selected p:after {
-  background-position: -4.4rem 0;
-}
-
-.edit #messages-container[data-type="list"] li.selected .received p:after {
-  background-position: -1.1rem 0;
 }
 
 .edit-button {
