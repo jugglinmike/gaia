@@ -323,6 +323,73 @@ suite('thread_ui.js >', function() {
       });
     });
   });
+
+  suite('message status update handlers', function() {
+    suiteSetup(function() {
+      this.fakeMessage = {
+        id: 24601
+      };
+      this.container = document.createElement('div');
+      this.container.id = 'message-' + this.fakeMessage.id;
+      this.initialMarkup = '<a class="bubble">' + 
+        '<aside><progress></progress></aside><p>Message text</p></a>';
+    });
+    setup(function() {
+      this.container.innerHTML = this.initialMarkup;
+      document.body.appendChild(this.container);
+    });
+    teardown(function() {
+      document.body.removeChild(this.container);
+    });
+
+    suite('onMessageSent', function() {
+      test('removes the "sending" class from the message element', function() {
+        this.container.classList.add('sending');
+        ThreadUI.onMessageSent(this.fakeMessage);
+        assert.isFalse(this.container.classList.contains('sending'));
+        this.container.classList.remove('sending');
+      });
+      test('removes the "aside" element', function() {
+        ThreadUI.onMessageSent(this.fakeMessage);
+        assert.equal(this.container.getElementsByTagName('aside').length, 0);
+      });
+    });
+
+    suite('onMessageFailed', function() {
+      suite('messages that were previously in the "sending" state', function() {
+        setup(function() {
+          this.container.classList.add('sending');
+        });
+        testdown(function() {
+          this.container.classList.remove('sending');
+        });
+        test('removes the "sending" class from the message element', function() {
+          ThreadUI.onMessageFailed(this.fakeMessage);
+          assert.isFalse(this.container.classList.contains('sending'));
+        });
+        test('adds the "error" class to the message element', function() {
+          ThreadUI.onMessageFailed(this.fakeMessage);
+          assert.ok(this.container.classList.contains('error'));
+        });
+        test('empties the "aside" element', function() {
+          ThreadUI.onMessageFailed(this.fakeMessage);
+          assert.equal(this.container.querySelector('aside').innerHTML, '');
+        });
+      });
+      suite('messages that were *not* previously in the "sending" state', function() {
+        test('does not add the "error" class to the message element', function() {
+          ThreadUI.onMessageFailed(this.fakeMessage);
+          assert.isFalse(this.container.classList.contains('error'));
+        });
+        test('does not modify the message markup', function() {
+          ThreadUI.onMessageFailed(this.fakeMessage);
+          assert.equal(this.container.innerHTML, this.initialMarkup);
+        });
+      });
+    });
+
+  });
+
   suite('createMmsContent', function() {
     test('generated html', function() {
       var inputArray = [{

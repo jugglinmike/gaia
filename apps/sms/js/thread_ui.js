@@ -1105,11 +1105,10 @@ var ThreadUI = global.ThreadUI = {
       return;
     }
     // Remove 'sending' style
-    var aElement = messageDOM.querySelector('a');
-    aElement.classList.remove('sending');
+    messageDOM.classList.remove('sending');
     // Remove the 'spinner'
-    var spinnerContainer = aElement.querySelector('aside');
-    aElement.removeChild(spinnerContainer);
+    var spinnerContainer = messageDOM.querySelector('aside');
+    spinnerContainer.parentNode.removeChild(spinnerContainer);
 
     // Play the audio notification
     if (this.sentAudioEnabled) {
@@ -1122,17 +1121,16 @@ var ThreadUI = global.ThreadUI = {
     if (!messageDOM) {
       return;
     }
-    // Remove 'sending' style and add 'error' style
-    var aElement = messageDOM.querySelector('a');
     // Check if it was painted as 'error' before
-    if (!aElement.classList.contains('sending')) {
+    if (!messageDOM.classList.contains('sending')) {
       return;
     }
-    aElement.classList.remove('sending');
-    aElement.classList.add('error');
+    // Remove 'sending' style and add 'error' style
+    messageDOM.classList.remove('sending');
+    messageDOM.classList.add('error');
 
     // Remove only the spinner
-    var spinnerContainer = aElement.querySelector('aside');
+    var spinnerContainer = messageDOM.querySelector('aside');
     spinnerContainer.innerHTML = '';
 
     ThreadUI.addResendHandler(message, messageDOM);
