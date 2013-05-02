@@ -39,7 +39,7 @@ var ThreadUI = global.ThreadUI = {
       'container', 'to-field', 'recipients-container',
       'header-text', 'recipient', 'input', 'compose-form',
       'check-all-button', 'uncheck-all-button',
-      'contact-pick-button', 'back-button', 'send-button',
+      'contact-pick-button', 'back-button', 'send-button', 'attach-button',
       'delete-button', 'cancel-button',
       'edit-mode', 'edit-form', 'tel-form'
     ].forEach(function(id) {
@@ -81,6 +81,10 @@ var ThreadUI = global.ThreadUI = {
 
     this.sendButton.addEventListener(
       'click', this.sendMessage.bind(this)
+    );
+
+    this.attachButton.addEventListener(
+      'click', this.attachImage.bind(this)
     );
 
     this.container.addEventListener(
@@ -1098,6 +1102,25 @@ var ThreadUI = global.ThreadUI = {
     this.updateHeaderData();
     // Send the SMS
     MessageManager.send(num, text);
+  },
+
+  attachImage: function thui_attachMessage() {
+    var activity = new MozActivity({
+      name: 'pick',
+      data: {
+        type: 'image/*', // any kind of image
+        nocrop: true
+      }
+    });
+
+    activity.onsuccess = function() {
+       // TODO: use `activity.result` to create the attachment.
+    };
+
+    activity.onerror = function() {
+      // TODO: Update the UI as if "cancel" was selected.
+      console.log("Unsuccessful pick", arguments);
+    };
   },
 
   onMessageSent: function thui_onMessageSent(message) {

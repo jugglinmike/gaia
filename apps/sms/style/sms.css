@@ -480,6 +480,25 @@ form.bottom[role="search"].messages-compose-form {
   top: -0.2rem;
 }
 
+button.icon span {
+  display: none;
+}
+button.icon:before {
+  content: " ";
+  display: block;
+  position: static;
+  margin: 0;
+  padding: 0;
+}
+button.icon-attach:before {
+  /* WARNING: This asset will also be introduced by Bug 862311. */
+  /* TODO: Refine global styles in `shared/styles/buttons.css` to be more
+   * flexible (obviating the need for the `!important` directive. */
+  background-image: url(images/paperclip.png) !important;
+  width: 18px;
+  height: 16px;
+}
+
 #messages-input {
   padding: 0.4rem 0.2rem 0.2rem 0.6rem;
   line-height: 1.8rem !important;
