@@ -362,7 +362,8 @@ suite('thread_ui.js >', function() {
         setup(function() {
           this.container.classList.add('sending');
         });
-        test('removes the "sending" class from the message element', function() {
+        test('removes the "sending" class from the message element',
+          function() {
           ThreadUI.onMessageFailed(this.fakeMessage);
           assert.isFalse(this.container.classList.contains('sending'));
         });
@@ -371,8 +372,10 @@ suite('thread_ui.js >', function() {
           assert.isTrue(this.container.classList.contains('error'));
         });
       });
-      suite('messages that were *not* previously in the "sending" state', function() {
-        test('does not add the "error" class to the message element', function() {
+      suite('messages that were *not* previously in the "sending" state',
+        function() {
+        test('does not add the "error" class to the message element',
+          function() {
           ThreadUI.onMessageFailed(this.fakeMessage);
           assert.isFalse(this.container.classList.contains('error'));
         });

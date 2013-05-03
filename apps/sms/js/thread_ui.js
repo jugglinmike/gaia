@@ -138,7 +138,9 @@ var ThreadUI = global.ThreadUI = {
       'mousedown', this.addRecipientFromContacts.bind(this)
     );
 
-    this.tmpl = ['contact', 'highlight', 'message'].reduce(function(tmpls, name) {
+    this.tmpl = [
+      'contact', 'highlight', 'message'
+    ].reduce(function(tmpls, name) {
       tmpls[name] = Utils.Template('messages-' + name + '-tmpl');
       return tmpls;
     }, {});
