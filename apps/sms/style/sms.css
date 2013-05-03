@@ -77,10 +77,12 @@ form[role="dialog"][data-type="edit"] header menu[type="toolbar"] button {
 }
 
 [data-type="list"] li > label {
-  opacity: 0;
+  right: 5rem;
+
   display: block;
   overflow: hidden;
-  right: 5rem;
+
+  opacity: 0;
   transform: translateX(0);
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -275,11 +277,12 @@ section[role="region"].new > header:first-child form {
 }
 
 #messages-container header {
-  border-bottom: none;
-  color: #606060;
-  font-size: 1.3rem;
   margin: 0 1.5rem 1rem;
   padding: 1rem 1.5rem 0;
+  border-bottom: none;
+
+  color: #606060;
+  font-size: 1.3rem;
   text-align: left;
   text-transform: uppercase;
 }
@@ -289,14 +292,15 @@ section[role="region"].new > header:first-child form {
 }
 
 #messages-container[data-type="list"] .message {
-  border-bottom: 0.1rem solid transparent;
+  position: relative;
+
   display: block;
   overflow: hidden;
-  margin: 0;
-  padding: 0.5rem 0;
-  position: relative;
   width: 100%;
   height: auto;
+  margin: 0;
+  padding: 0.5rem 0;
+  border-bottom: 0.1rem solid transparent;
 }
 
 #messages-container[data-type="list"] .message.hidden {
@@ -312,11 +316,12 @@ section[role="region"].new > header:first-child form {
 }
 
 #messages-container[data-type="list"] .message .bubble {
-  height: 100%;
   overflow: visible;
-  background: #fff;
-  max-width: 100%;
   -moz-box-sizing: border-box;
+  max-width: 100%;
+  height: 100%;
+
+  background: #fff;
 }
 
 #messages-container[data-type="list"] .message.outgoing {
@@ -324,20 +329,23 @@ section[role="region"].new > header:first-child form {
 }
 
 #messages-container[data-type="list"] .message.outgoing .bubble {
+  float: right;
+
   /* Prevent text content from rendering underneath the absolutely-positioned
    * aside.
    * TODO: Render the aside within the layout using flexbox. */
   padding-right: 5rem;
-  float: right;
   margin-left: 2rem;
 }
 
 #messages-container[data-type="list"] .message.incoming .bubble {
   float: left;
+
   border-radius: 0 0.3rem 0.3rem 0;
-  background: #FCC987;
-  padding-left: 2rem;
   margin-right: 2rem;
+  padding-left: 2rem;
+
+  background: #FCC987;
   transition: padding-left 0.3s ease 0s;
 }
 
@@ -356,13 +364,15 @@ section[role="region"].new > header:first-child form {
 }
 
 #messages-container[data-type="list"] .message .bubble aside {
-  overflow: hidden;
-  width: 5rem;
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   z-index: auto;
+
+  overflow: hidden;
+  width: 5rem;
+
   text-align: center;
 }
 
@@ -376,8 +386,10 @@ section[role="region"].new > header:first-child form {
 }
 
 #messages-container[data-type="list"] .message .bubble p {
-  padding: 1rem;
   position: relative;
+
+  padding: 1rem;
+
   text-align: left;
   line-height: 2.2rem;
   white-space: normal;
