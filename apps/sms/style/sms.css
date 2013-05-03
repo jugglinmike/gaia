@@ -83,7 +83,6 @@ form[role="dialog"][data-type="edit"] header menu[type="toolbar"] button {
   overflow: hidden;
 
   opacity: 0;
-  transform: translateX(0);
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
