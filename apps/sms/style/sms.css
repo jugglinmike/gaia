@@ -300,6 +300,8 @@ section[role="region"].new > header:first-child form {
   margin: 0;
   padding: 0.5rem 0;
   border-bottom: 0.1rem solid transparent;
+
+  transition: none;
 }
 
 #messages-container[data-type="list"] .message.hidden {
@@ -317,7 +319,7 @@ section[role="region"].new > header:first-child form {
 #messages-container[data-type="list"] .message .bubble {
   overflow: visible;
   -moz-box-sizing: border-box;
-  max-width: 100%;
+  max-width: -moz-calc(100% - 2rem);
   height: 100%;
 
   background: #fff;
@@ -325,10 +327,6 @@ section[role="region"].new > header:first-child form {
 
 #messages-container[data-type="list"] .message.mms .bubble > img {
   display: block;
-}
-
-#messages-container[data-type="list"] .message.outgoing {
-  transition: padding-left 0.3s ease 0s;
 }
 
 #messages-container[data-type="list"] .message.outgoing .bubble {
@@ -349,7 +347,6 @@ section[role="region"].new > header:first-child form {
   padding-left: 2rem;
 
   background: #FCC987;
-  transition: padding-left 0.3s ease 0s;
 }
 
 #messages-container[data-type="list"] .message.sending .bubble {
@@ -398,6 +395,7 @@ section[role="region"].new > header:first-child form {
 #messages-container[data-type="list"] .message.sending .bubble > aside progress {
   display: block;
   height: 100%;
+  margin: 0 auto;
 }
 
 #messages-container[data-type="list"] .message .bubble p {
@@ -431,11 +429,11 @@ section[role="region"].new > header:first-child form {
 }
 
 .edit #messages-container[data-type="list"] .message.outgoing {
-  padding-left: 7rem;
+  padding-left: 4rem;
 }
 
 .edit #messages-container[data-type="list"] .message.incoming .bubble {
-  padding-left: 7rem;
+  padding-left: 6rem;
 }
 
 .edit-button {

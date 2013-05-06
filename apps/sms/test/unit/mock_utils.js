@@ -12,9 +12,6 @@ var MockUtils = {
   },
   getDayDate: Utils.getDayDate,
   getFormattedHour: Utils.getFormattedHour,
-  getHeaderDate: Utils.getHeaderDate,
-  getContactDetails: Utils.getContactDetails,
-  getResizedImgBlob: Utils.getResizedImgBlob,
 
   // real code needed here to map types
   typeFromMimeType: Utils.typeFromMimeType,

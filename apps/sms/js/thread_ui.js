@@ -781,18 +781,14 @@ var ThreadUI = global.ThreadUI = {
   },
 
   buildMessageDOM: function thui_buildMessageDOM(message, hidden) {
-    var bodyMarkup = LinkHelper.searchAndLinkClickableData(Utils.Message.format(
+    var bodyHTML = LinkHelper.searchAndLinkClickableData(Utils.Message.format(
       message.body || ''
     ));
     var delivery = message.delivery;
     var messageDOM = document.createElement('li');
 
     var classNames = ['message', message.type, delivery];
-    if (delivery === 'received') {
-      classNames.push('incoming');
-    } else {
-      classNames.push('outgoing');
-    }
+    classNames.push(delivery === 'received' ? 'incoming' : 'outgoing');
     if (hidden) {
       classNames.push('hidden');
     }
@@ -802,9 +798,9 @@ var ThreadUI = global.ThreadUI = {
 
     messageDOM.innerHTML = this.tmpl.message.interpolate({
       id: message.id,
-      body: bodyMarkup
+      bodyHTML: bodyHTML
     }, {
-      safe: ['body']
+      safe: ['bodyHTML']
     });
 
     if (delivery === 'error') {
@@ -861,8 +857,7 @@ var ThreadUI = global.ThreadUI = {
   },
 
   addResendHandler: function thui_addResendHandler(message, messageDOM) {
-    var aElement = messageDOM.querySelector('aside');
-    aElement.addEventListener('click', function resend(e) {
+    messageDOM.addEventListener('click', function resend(e) {
       var hash = window.location.hash;
       if (hash != '#edit') {
         if (window.confirm(navigator.mozL10n.get('resend-confirmation'))) {
@@ -1104,7 +1099,7 @@ var ThreadUI = global.ThreadUI = {
       return;
     }
     // Check if it was painted as 'error' before
-    if (!messageDOM.classList.contains('sending')) {
+    if (messageDOM.classList.contains('error')) {
       return;
     }
 
