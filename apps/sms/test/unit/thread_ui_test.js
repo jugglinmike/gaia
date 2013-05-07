@@ -484,6 +484,23 @@ suite('thread_ui.js >', function() {
 
   });
 
+  suite('attachment UI >', function() {
+    setup(function() {
+      this.attachButton = ThreadUI.attachButton;
+    });
+    test('invokes the "pick" MozActivity when clicked', function() {
+      this.attachButton.click();
+      assert.equal(MockMozActivity.calls.length, 1);
+      var call = MockMozActivity.calls[0];
+      assert.equal(call.name, 'pick');
+      assert.isDefined(call.data);
+      assert.isArray(call.data.type);
+      assert.include(call.data.type, 'image/*');
+      assert.include(call.data.type, 'audio/*');
+      assert.include(call.data.type, 'video/*');
+    });
+  });
+
   suite('createMmsContent', function() {
     test('generated html', function() {
       var inputArray = [{

@@ -113,7 +113,7 @@ var Compose = (function() {
     init: function thui_compose_init(formId) {
       dom.form = document.getElementById(formId);
       dom.message = dom.form.querySelector('[contenteditable]');
-      dom.button = dom.form.querySelector('button');
+      dom.button = dom.form.querySelector('button[type="submit"]');
 
       // update the placeholder after input
       dom.message.addEventListener('input', composeCheck);

@@ -42,7 +42,7 @@ var ThreadUI = global.ThreadUI = {
       'container', 'to-field', 'recipients-list',
       'header-text', 'recipient', 'input', 'compose-form',
       'check-all-button', 'uncheck-all-button',
-      'contact-pick-button', 'back-button', 'send-button',
+      'contact-pick-button', 'back-button', 'send-button', 'attach-button',
       'delete-button', 'cancel-button',
       'edit-mode', 'edit-form', 'tel-form',
       'max-length-notice'
@@ -88,6 +88,10 @@ var ThreadUI = global.ThreadUI = {
 
     this.sendButton.addEventListener(
       'click', this.sendMessage.bind(this)
+    );
+
+    this.attachButton.addEventListener(
+      'click', this.onAttachClick.bind(this)
     );
 
     this.container.addEventListener(
@@ -457,7 +461,7 @@ var ThreadUI = global.ThreadUI = {
         bottomBarMaxHeight / fontSize + verticalPadding + 'rem';
       // We update the position of the button taking into account the
       // new height
-      this.sendButton.style.marginTop =
+      this.sendButton.style.marginTop = this.attachButton.style.marginTop =
         (this.input.offsetHeight - buttonHeight) / fontSize + 'rem';
       return;
     }
@@ -480,7 +484,8 @@ var ThreadUI = global.ThreadUI = {
     // We move the button to the right position
     var buttonOffset = (this.input.offsetHeight - buttonHeight) /
       fontSize + 'rem';
-    this.sendButton.style.marginTop = buttonOffset;
+    this.sendButton.style.marginTop = this.attachButton.style.marginTop =
+      buttonOffset;
 
     // Last adjustment to view taking into account the new height of the bar
     this.container.style.bottom = bottomBarHeight;
@@ -1057,6 +1062,28 @@ var ThreadUI = global.ThreadUI = {
       // PENDING: https://bugzilla.mozilla.org/show_bug.cgi?id=868679
       window.location.hash = '#thread-list';
     }
+  },
+
+  onAttachClick: function thui_onAttachClick() {
+    this.pickAttachment();
+  },
+
+  pickAttachment: function thui_pickAttachment() {
+    var activity = new MozActivity({
+      name: 'pick',
+      data: {
+        type: ['image/*', 'audio/*', 'video/*'],
+        nocrop: true
+      }
+    });
+
+    activity.onsuccess = function() {
+       // TODO: use `activity.result` to create the attachment.
+    };
+
+    activity.onerror = function() {
+      // TODO: Update the UI as if "cancel" was selected.
+    };
   },
 
   onMessageSent: function thui_onMessageSent(message) {
