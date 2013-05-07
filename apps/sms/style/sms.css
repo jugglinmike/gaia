@@ -112,7 +112,7 @@ form[role="dialog"][data-type="edit"] header menu[type="toolbar"] button {
 .edit [data-type="list"] li > label {
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(7rem);
+  transform: translateX(5rem);
 }
 
 .edit [data-type="list"] li > a > aside.icon-unread {
@@ -272,8 +272,8 @@ section[role="region"].new > header:first-child form {
 }
 
 #messages-container header {
-  margin: 0 1.5rem 1rem;
-  padding: 1rem 1.5rem 0;
+  margin: 0 0 1rem;
+  padding: 1.5rem 0 0 0;
   border-bottom: none;
 
   color: #606060;
@@ -284,6 +284,11 @@ section[role="region"].new > header:first-child form {
 
 #messages-container[data-type="list"] > ul:last-child {
   margin-bottom: 7rem;
+}
+
+#messages-container header,
+  #messages-container[data-type="list"] .message.incoming .bubble {
+  padding-left: 4rem;
 }
 
 #messages-container[data-type="list"] .message {
@@ -311,8 +316,9 @@ section[role="region"].new > header:first-child form {
 #messages-container[data-type="list"] .message .bubble {
   overflow: visible;
   -moz-box-sizing: border-box;
-  max-width: -moz-calc(100% - 2rem);
+  max-width: -moz-calc(100% - 4rem);
   height: 100%;
+  padding: 1.5rem;
 
   background: #fff;
 }
@@ -324,19 +330,15 @@ section[role="region"].new > header:first-child form {
 #messages-container[data-type="list"] .message.outgoing .bubble {
   float: right;
 
-  /* Prevent text content from rendering underneath the absolutely-positioned
-   * aside.
-   * TODO: Render the aside within the layout using flexbox. */
   padding-right: 5rem;
-  margin-left: 2rem;
+  margin-left: 4rem;
+  border-radius: 0.3rem 0 0 0.3rem;
 }
 
 #messages-container[data-type="list"] .message.incoming .bubble {
   float: left;
 
   border-radius: 0 0.3rem 0.3rem 0;
-  margin-right: 2rem;
-  padding-left: 2rem;
 
   background: #FCC987;
 }
@@ -391,13 +393,10 @@ section[role="region"].new > header:first-child form {
 }
 
 #messages-container[data-type="list"] .message .bubble p {
-  position: relative;
-
-  padding: 1rem;
-
   text-align: left;
   line-height: 2.2rem;
   white-space: normal;
+  padding: 0;
 }
 
 /*
@@ -414,18 +413,6 @@ section[role="region"].new > header:first-child form {
 
 .edit [data-type="list"] .message .bubble {
   pointer-events: none;
-}
-
-.edit #messages-container[data-type="list"] .message p {
-  transform: translateX(0);
-}
-
-.edit #messages-container[data-type="list"] .message.outgoing {
-  padding-left: 4rem;
-}
-
-.edit #messages-container[data-type="list"] .message.incoming .bubble {
-  padding-left: 6rem;
 }
 
 .edit-button {
