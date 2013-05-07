@@ -514,6 +514,11 @@ form.bottom[role="search"].messages-compose-form {
   padding-right: 0.5rem;
 }
 
+/* TODO: Move this into the shared building block */
+#messages-attach-button:before {
+  background-image: url(images/paperclip-button.png);
+}
+
 #messages-compose-form {
   max-height: 38rem;
 }
@@ -532,7 +537,6 @@ form.bottom[role="search"].messages-compose-form {
   color: #888;
   position: absolute;
   top: 0.8rem;
-  left: 0.8rem;
   content: attr(placeholder);
 }
 #messages-input .attachment {
