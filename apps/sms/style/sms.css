@@ -221,15 +221,6 @@ form[role="dialog"][data-type="edit"] header menu[type="toolbar"] button {
   transform: translateY(0);
 }
 
-.edit #threads-container .item > a {
-  transform: translateX(3rem);
-  pointer-events: none;
-}
-
-.edit #threads-container .item > a.unread .unread-tag {
-  opacity: 0;
-}
-
 .edit #threads-container .checkbox-container {
   pointer-events:auto;
   opacity: 1;

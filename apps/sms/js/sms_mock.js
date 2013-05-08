@@ -309,14 +309,6 @@
         unreadCount: 0
       },
       {
-        id: 3,
-        participants: ['197743697'],
-        lastMessageType: 'mms',
-        body: undefined,
-        timestamp: new Date(Date.now() - 652800000),
-        unreadCount: 0
-      },
-      {
         id: 4,
         participants: ['197746797'],
         body: 'short (delivery: received)',
@@ -335,7 +327,7 @@
       {
         id: 6,
         participants: ['052780'],
-        body: 'Test MMS message',
+        body: undefined,
         lastMessageType: 'mms',
         timestamp: new Date(),
         unreadCount: 0

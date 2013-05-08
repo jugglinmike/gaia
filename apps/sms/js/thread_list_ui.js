@@ -293,6 +293,10 @@ var ThreadListUI = {
     threadDOM.dataset.time = timestamp;
     threadDOM.dataset.phoneNumber = num;
 
+    if (thread.unreadCount > 0) {
+      threadDOM.classList.add('unread');
+    }
+
     // Retrieving params from thread
     var bodyText = (thread.body || '').split('\n')[0];
     var bodyHTML = Utils.Message.format(bodyText);
@@ -300,7 +304,6 @@ var ThreadListUI = {
     // Create HTML Structure
     var structureHTML = this.tmpl.thread.interpolate({
       num: num,
-      linkClass: thread.unreadCount > 0 ? 'unread' : '',
       formattedDate: Utils.getFormattedHour(timestamp),
       bodyHTML: bodyHTML
     }, ['bodyHTML']);
