@@ -69,6 +69,7 @@ form[role="dialog"][data-type="edit"] header menu[type="toolbar"] button {
   padding-left: 20px;
   min-width: 18px;
   min-height: 16px;
+  margin-left: 3px;
 }
 
 [data-type="list"] header {
