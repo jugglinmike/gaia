@@ -160,6 +160,33 @@ suite('SMS App Unit-Test', function() {
     // We are gonna review the HTML structure with this suite
     suite('Threads-list rendering', function() {
 
+      test('properly updates in response to an arriving message of a ' +
+        'different type', function() {
+        var container = ThreadListUI.container;
+        MessageManager.getThreads(function(threads) {
+          threads.forEach(function(thread, idx) {
+            var newMessage = {
+              threadId: thread.id,
+              sender: thread.participants[0],
+              timestamp: thread.timestamp,
+              type: thread.lastMessageType === 'mms' ? 'sms' : 'mms'
+            };
+            MessageManager.onMessageReceived({
+              message: newMessage
+            });
+          });
+        });
+        var mmsThreads = container.querySelectorAll(
+          '[data-last-message-type="mms"]'
+        );
+        var smsThreads = container.querySelectorAll(
+          '[data-last-message-type="sms"]'
+        );
+
+        assert.equal(mmsThreads.length, 3);
+        assert.equal(smsThreads.length, 1);
+      });
+
       test('Check HTML structure', function() {
         // Check the HTML structure, and if it fits with Building Blocks
 
