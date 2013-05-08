@@ -64,12 +64,14 @@ form[role="dialog"][data-type="edit"] header menu[type="toolbar"] button {
 }
 
 [data-type="list"] [data-last-message-type="mms"] .body-text {
-  background-image: url('images/paperclip.png');
-  background-repeat: no-repeat;
   padding-left: 2rem;
   min-width: 1.8rem;
   min-height: 1.6rem;
   margin-left: 0.3rem;
+
+  background-image: url('images/paperclip.png');
+  background-repeat: no-repeat;
+  background-size: auto 100%;
 }
 
 [data-type="list"] header {
