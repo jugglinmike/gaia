@@ -307,7 +307,9 @@ var ThreadListUI = {
       num: num,
       formattedDate: Utils.getFormattedHour(timestamp),
       bodyHTML: bodyHTML
-    }, ['bodyHTML']);
+    }, {
+      safe: ['bodyHTML']
+    });
 
     // Update HTML
     threadDOM.innerHTML = structureHTML;
