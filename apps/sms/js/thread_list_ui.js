@@ -288,6 +288,7 @@ var ThreadListUI = {
     var num = thread.participants[0];
     var timestamp = thread.timestamp.getTime();
     var threadDOM = document.createElement('li');
+    var bodyHTML = '';
     threadDOM.id = 'thread_' + thread.id;
     threadDOM.dataset.lastMessageType = thread.lastMessageType;
     threadDOM.dataset.time = timestamp;
@@ -297,9 +298,9 @@ var ThreadListUI = {
       threadDOM.classList.add('unread');
     }
 
-    // Retrieving params from thread
-    var bodyText = (thread.body || '').split('\n')[0];
-    var bodyHTML = Utils.Message.format(bodyText);
+    if (thread.lastMessageType === 'sms' && thread.body) {
+      bodyHTML = Utils.Message.format(thread.body).split('\n')[0];
+    }
 
     // Create HTML Structure
     var structureHTML = this.tmpl.thread.interpolate({
