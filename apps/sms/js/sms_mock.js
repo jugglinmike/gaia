@@ -327,7 +327,6 @@
       {
         id: 6,
         participants: ['052780'],
-        body: undefined,
         lastMessageType: 'mms',
         timestamp: new Date(),
         unreadCount: 0
