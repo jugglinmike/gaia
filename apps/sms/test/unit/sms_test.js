@@ -173,8 +173,12 @@ suite('SMS App Unit-Test', function() {
         assertNumberOfElementsInContainerByTag(container, 4, 'li');
         assertNumberOfElementsInContainerByTag(container, 4, 'a');
 
-        var mmsThreads = container.querySelectorAll('[data-last-message-type="mms"]');
-        var smsThreads = container.querySelectorAll('[data-last-message-type="sms"]');
+        var mmsThreads = container.querySelectorAll(
+          '[data-last-message-type="mms"]'
+        );
+        var smsThreads = container.querySelectorAll(
+          '[data-last-message-type="sms"]'
+        );
         assert.equal(mmsThreads.length, 1);
         assert.equal(smsThreads.length, 3);
 
