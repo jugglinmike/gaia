@@ -6,6 +6,7 @@
 mocha.globals(['0']);
 
 requireApp('sms/js/compose.js');
+requireApp('sms/js/attachment.js');
 requireApp('sms/js/utils.js');
 requireApp('sms/js/thread_ui.js');
 
@@ -204,6 +205,33 @@ suite('compose_test.js', function() {
         assert.isDefined(call.data);
         assert.isArray(call.data.type);
         assert.include(call.data.type, 'image/*');
+      });
+      test('Invokes the provided "success" handler with an appropriate ' +
+        'Attachment instance', function(done) {
+        Compose.requestAttachment({
+          success: function(attachment) {
+            assert.instanceOf(attachment, Attachment);
+            assert.equal(attachment.type, 'image');
+            assert.equal(attachment.size, 0);
+            assert.match(attachment.uri, /^blob:.+$/);
+            done();
+          }
+        });
+
+        var activity = MockMozActivity.instances[0];
+        activity.result = {
+          type: 'image/jpeg',
+          blob: new Blob()
+        };
+        activity.onsuccess();
+      });
+      test('Invokes the provided "failure" handler when the MozActivity fails',
+        function(done) {
+        Compose.requestAttachment({
+          failure: done
+        });
+        var activity = MockMozActivity.instances[0];
+        activity.onerror();
       });
     });
 

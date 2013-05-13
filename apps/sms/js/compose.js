@@ -255,13 +255,18 @@ var Compose = (function() {
     },
 
     onAttachClick: function thui_onAttachClick() {
-      this.requestAttachment();
+      this.requestAttachment({
+        success: this.append.bind(this)
+      });
     },
 
     /** Initiates a 'pick' MozActivity allowing the user to create an
      * attachment
+     * @param {Object} options Optionally specifies a `success` and/or
+     *                         `failure` callback. The `success` callback will
+     *                         be invoked with the newly-created attachment.
      */
-    requestAttachment: function() {
+    requestAttachment: function(options = {}) {
       var activity = new MozActivity({
         name: 'pick',
         data: {
@@ -271,12 +276,19 @@ var Compose = (function() {
       });
 
       activity.onsuccess = function() {
-         // TODO: use `activity.result` to create the attachment.
+        var result = activity.result;
+        var blob = result.blob;
+        var objectURL = window.URL.createObjectURL(blob);
+        // Parse the attachment type from the MIME type
+        var type = result.type.split('/')[0];
+        var attachment = new Attachment(type, objectURL, blob.size);
+
+        if (typeof options.success === 'function') {
+          options.success(attachment);
+        }
       };
 
-      activity.onerror = function() {
-        // TODO: Update the UI as if "cancel" was selected.
-      };
+      activity.onerror = options.failure;
     }
 
   };
