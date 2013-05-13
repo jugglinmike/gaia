@@ -237,7 +237,7 @@ suite('thread_ui.js >', function() {
       });
 
       test('no counter is displayed', function() {
-        assert.equal(sendButton.dataset.counter, '');
+        assert.isFalse(sendButton.classList.contains('has-counter'));
       });
 
       test('no banner is displayed', function() {
@@ -262,7 +262,7 @@ suite('thread_ui.js >', function() {
       });
 
       test('no counter is displayed', function() {
-        assert.equal(sendButton.dataset.counter, '');
+        assert.isFalse(sendButton.classList.contains('has-counter'));
       });
 
       test('no banner is displayed', function() {
