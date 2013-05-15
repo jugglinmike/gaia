@@ -948,24 +948,24 @@ var ThreadUI = global.ThreadUI = {
   },
 
   handleMessageClick: function thui_handleMessageClick(evt) {
-    var messageDOM = evt.target;
+    var currentNode = evt.target;
     var inBubble = false;
-    var bubbleDOM;
+    var messageDOM;
 
-    while (messageDOM && !messageDOM.classList.contains('message')) {
-      inBubble |= messageDOM.classList.contains('bubble');
-      messageDOM = messageDOM.parentNode;
+    while (currentNode && currentNode.classList && !currentNode.classList.contains('message')) {
+      inBubble |= currentNode.classList.contains('bubble');
+      currentNode = currentNode.parentNode;
     }
-    if (!messageDOM) {
+    if (!currentNode || !currentNode.classList) {
       return;
     }
+    messageDOM = currentNode;
 
     if (inBubble && messageDOM.classList.contains('error')) {
       if (window.confirm(navigator.mozL10n.get('resend-confirmation'))) {
         this.resendMessage(messageDOM.dataset.messageId);
       }
     }
-
   },
 
   handleEvent: function thui_handleEvent(evt) {
