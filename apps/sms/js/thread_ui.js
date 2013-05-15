@@ -122,18 +122,17 @@ var ThreadUI = global.ThreadUI = {
       'focus', this.messageComposerFocusHandler.bind(this)
     );
 
-    // Delegate to |this.handleEvent|
     this.container.addEventListener(
       'click', this.handleEvent.bind(this)
     );
     this.container.addEventListener(
-      'contextmenu', this
+      'contextmenu', this.handleEvent.bind(this)
     );
     this.editForm.addEventListener(
-      'submit', this
+      'submit', this.handleEvent.bind(this)
     );
     this.composeForm.addEventListener(
-      'submit', this
+      'submit', this.handleEvent.bind(this)
     );
     // For picking a contact from Contacts. It's mouse down for
     // avoiding weird effect of keyboard, as in 'send' button.
@@ -991,8 +990,8 @@ var ThreadUI = global.ThreadUI = {
 
         var input = evt.target.parentNode.querySelector('input');
         if (input) {
-          ThreadUI.chooseMessage(input);
-          ThreadUI.checkInputs();
+          this.chooseMessage(input);
+          this.checkInputs();
         }
         break;
       case 'contextmenu':
@@ -1173,7 +1172,7 @@ var ThreadUI = global.ThreadUI = {
 
     request = MessageManager.getMessage(id);
 
-    request.onsuccess = function() {
+    request.onsuccess = (function() {
       var message = request.result;
       // delete from Gecko db as well
       MessageManager.deleteMessage(id, function(success) {
@@ -1184,7 +1183,7 @@ var ThreadUI = global.ThreadUI = {
         // We resend again
         this.sendMessage(message.body);
       }.bind(this));
-    }.bind(this);
+    }).bind(this);
   },
 
 
