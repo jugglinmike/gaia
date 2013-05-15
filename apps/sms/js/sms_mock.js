@@ -544,6 +544,38 @@
     return request;
   };
 
+  // getMessage
+  // Parameters:
+  //  - id: Number specifying the message to retrieve
+  //  Returns: request object
+  MockNavigatormozMobileMessage.getMessage = function(id) {
+    var request = {
+      error: null
+    };
+
+    setTimeout(function() {
+      if (simulation.failState()) {
+        request.error = {
+          name: 'mock getMessage error'
+        };
+        if (typeof request.onerror === 'function') {
+          request.onerror();
+        }
+        return;
+      }
+
+      request.result = messagesDb.messages.filter(function(message) {
+        return message.id === id;
+      })[0];
+
+      if (typeof request.onsuccess === 'function') {
+        request.onsuccess();
+      }
+    }, simulation.delay());
+
+    return request;
+  };
+
   // getMessages
   // Parameters:
   //  - filter: object specifying any optional criteria by which to filter
@@ -645,8 +677,11 @@
         return;
       }
 
+      request.result = false;
+
       for (idx = 0, len = msgs.length; idx < len; ++idx) {
         if (msgs[idx].id === id) {
+          request.result = true;
           msgs.splice(idx, 1);
           break;
         }

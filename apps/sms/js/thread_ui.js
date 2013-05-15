@@ -124,7 +124,7 @@ var ThreadUI = global.ThreadUI = {
 
     // Delegate to |this.handleEvent|
     this.container.addEventListener(
-      'click', this
+      'click', this.handleEvent.bind(this)
     );
     this.container.addEventListener(
       'contextmenu', this
@@ -771,6 +771,7 @@ var ThreadUI = global.ThreadUI = {
     }
 
     messageDOM.id = 'message-' + message.id;
+    messageDOM.dataset.messageId = message.id;
 
     messageDOM.innerHTML = this.tmpl.message.interpolate({
       id: String(message.id),
@@ -778,10 +779,6 @@ var ThreadUI = global.ThreadUI = {
     }, {
       safe: ['bodyHTML']
     });
-
-    if (delivery === 'error') {
-      ThreadUI.addResendHandler(message, messageDOM);
-    }
 
     var pElement = messageDOM.querySelector('p');
     if (message.type === 'mms') { // MMS
@@ -830,18 +827,6 @@ var ThreadUI = global.ThreadUI = {
     for (var i = elements.length - 1; i >= 0; i--) {
       elements[i].classList.remove('hidden');
     }
-  },
-
-  addResendHandler: function thui_addResendHandler(message, messageDOM) {
-    messageDOM.addEventListener('click', function resend(e) {
-      var hash = window.location.hash;
-      if (hash != '#edit') {
-        if (window.confirm(navigator.mozL10n.get('resend-confirmation'))) {
-          messageDOM.removeEventListener('click', resend);
-          ThreadUI.resendMessage(message, messageDOM);
-        }
-      }
-    });
   },
 
   cleanForm: function thui_cleanForm() {
@@ -962,10 +947,32 @@ var ThreadUI = global.ThreadUI = {
     }
   },
 
+  handleMessageClick: function thui_handleMessageClick(evt) {
+    var messageDOM = evt.target;
+    var inBubble = false;
+    var bubbleDOM;
+
+    while (messageDOM && !messageDOM.classList.contains('message')) {
+      inBubble |= messageDOM.classList.contains('bubble');
+      messageDOM = messageDOM.parentNode;
+    }
+    if (!messageDOM) {
+      return;
+    }
+
+    if (inBubble && messageDOM.classList.contains('error')) {
+      if (window.confirm(navigator.mozL10n.get('resend-confirmation'))) {
+        this.resendMessage(messageDOM.dataset.messageId);
+      }
+    }
+
+  },
+
   handleEvent: function thui_handleEvent(evt) {
     switch (evt.type) {
       case 'click':
         if (window.location.hash !== '#edit') {
+          this.handleMessageClick(evt);
           // Handle events on links in a message
           thui_mmsAttachmentClick(evt.target);
           LinkActionHandler.handleTapEvent(evt);
@@ -1089,8 +1096,6 @@ var ThreadUI = global.ThreadUI = {
     messageDOM.classList.remove('sending');
     messageDOM.classList.add('error');
 
-    ThreadUI.addResendHandler(message, messageDOM);
-
     this.ifRilDisabled(this.showAirplaneModeError);
   },
 
@@ -1121,33 +1126,52 @@ var ThreadUI = global.ThreadUI = {
     );
   },
 
-  resendMessage: function thui_resendMessage(message, messageDOM) {
-    // Is the last one in the ul?
-    var messagesContainer = messageDOM.parentNode;
-    if (messagesContainer.childNodes.length == 1) {
-      // If it is, we remove header & container
-      var header = messagesContainer.previousSibling;
-      ThreadUI.container.removeChild(header);
-      ThreadUI.container.removeChild(messagesContainer);
-    } else {
-      // If not we only have to remove the message
-      messageDOM.parentNode.removeChild(messageDOM);
+  resendMessage: function thui_resendMessage(id) {
+    var messageDOM, messagesContainer, request;
+
+    if (typeof id !== 'number') {
+      id = parseInt(id, 10);
+    }
+    messageDOM = this.container.querySelector('[data-message-id="' + id +
+      '"]');
+    messagesContainer = messageDOM.parentNode;
+
+    // Defer removing the message from the DOM until after it has been
+    // successfully removed from the database
+    function removeFromDOM() {
+      // Is the last one in the ul?
+      if (messagesContainer.childNodes.length == 1) {
+        // If it is, we remove header & container
+        var header = messagesContainer.previousSibling;
+        ThreadUI.container.removeChild(header);
+        ThreadUI.container.removeChild(messagesContainer);
+      } else {
+        // If not we only have to remove the message
+        messageDOM.parentNode.removeChild(messageDOM);
+      }
+
+      // Have we more elements in the view?
+      if (!ThreadUI.container.childNodes.length) {
+        // Update header index
+        ThreadUI.dayHeaderIndex = 0;
+        ThreadUI.timeHeaderIndex = 0;
+      }
     }
 
-    // Have we more elements in the view?
-    if (!ThreadUI.container.childNodes.length) {
-      // Update header index
-      ThreadUI.dayHeaderIndex = 0;
-      ThreadUI.timeHeaderIndex = 0;
-    }
+    request = MessageManager.getMessage(id);
 
-    // delete from Gecko db as well
-    if (message.id) {
-      MessageManager.deleteMessage(message.id);
-    }
-
-    // We resend again
-    ThreadUI.sendMessage(message.body);
+    request.onsuccess = function() {
+      var message = request.result;
+      // delete from Gecko db as well
+      MessageManager.deleteMessage(id, function(success) {
+        if (!success) {
+          return;
+        }
+        removeFromDOM();
+        // We resend again
+        this.sendMessage(message.body);
+      }.bind(this));
+    }.bind(this);
   },
 
 
