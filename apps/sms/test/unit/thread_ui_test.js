@@ -7,6 +7,7 @@ mocha.setup({ globals: ['alert'] });
 requireApp('sms/js/compose.js');
 requireApp('sms/js/thread_ui.js');
 requireApp('sms/js/utils.js');
+requireApp('sms/js/message_manager.js');
 
 requireApp('sms/test/unit/mock_alert.js');
 requireApp('sms/test/unit/mock_l10n.js');
@@ -478,9 +479,77 @@ suite('thread_ui.js >', function() {
 
   });
 
+  suite('resendMessage', function() {
+    setup(function() {
+      this.targetMsg = {
+        id: 23,
+        type: 'sms',
+        body: 'This is a test',
+        delivery: 'error',
+        timestamp: new Date()
+      };
+      this.otherMsg = {
+        id: 45,
+        type: 'sms',
+        body: 'This is another test',
+        delivery: 'sent',
+        timestamp: new Date()
+      };
+      ThreadUI.appendMessage(this.targetMsg);
+      ThreadUI.appendMessage(this.otherMsg);
+
+      assert.length(
+        ThreadUI.container.querySelectorAll('[data-message-id="23"]'),
+        1);
+      assert.length(
+        ThreadUI.container.querySelectorAll('[data-message-id="45"]'),
+        1);
+
+      this.getMessageReq = {};
+      sinon.stub(MessageManager, 'getMessage')
+        .returns(this.getMessageReq);
+      sinon.stub(MessageManager, 'deleteMessage').callsArgWith(1, true);
+
+      sinon.stub(ThreadUI, 'sendMessage');
+    });
+    teardown(function() {
+      MessageManager.getMessage.restore();
+      MessageManager.deleteMessage.restore();
+      ThreadUI.sendMessage.restore();
+    });
+
+    // TODO: Implement this functionality in a specialized method and update
+    // this test accordingly.
+    // Bug 872725 - [MMS] Message deletion logic is duplicated
+    test('removes the markup of only the specified message from the DOM',
+      function() {
+      ThreadUI.resendMessage(23);
+
+      this.getMessageReq.result = this.targetMsg;
+      this.getMessageReq.onsuccess();
+
+      assert.length(
+        ThreadUI.container.querySelectorAll('[data-message-id="23"]'),
+        0);
+      assert.length(
+        ThreadUI.container.querySelectorAll('[data-message-id="45"]'),
+        1);
+    });
+
+    test('invokes the `sendMessage` method', function() {
+      ThreadUI.resendMessage(23);
+
+      this.getMessageReq.result = this.targetMsg;
+      this.getMessageReq.onsuccess();
+
+      assert.deepEqual(ThreadUI.sendMessage.args, [[this.targetMsg.body]]);
+    });
+
+  });
+
   // TODO: Move these tests to an integration test suite.
   // Bug 868056 - Clean up SMS test suite
-  suite('Message resending >', function() {
+  suite('Message resending UI', function() {
     setup(function() {
       ThreadUI.appendMessage({
         id: 23,

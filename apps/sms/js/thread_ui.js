@@ -1148,6 +1148,9 @@ var ThreadUI = global.ThreadUI = {
 
     // Defer removing the message from the DOM until after it has been
     // successfully removed from the database
+    // TODO: Generelize this logic so it may be shared with `ThreadUI.delete`
+    // and more thoroughly tested.
+    // Bug 872725 - [MMS] Message deletion logic is duplicated
     function removeFromDOM() {
       // Is the last one in the ul?
       if (messagesContainer.childNodes.length == 1) {
