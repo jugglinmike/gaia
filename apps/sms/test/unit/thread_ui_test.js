@@ -478,6 +478,71 @@ suite('thread_ui.js >', function() {
 
   });
 
+  // TODO: Move these tests to an integration test suite.
+  // Bug 868056 - Clean up SMS test suite
+  suite('Message resending >', function() {
+    setup(function() {
+      ThreadUI.appendMessage({
+        id: 23,
+        type: 'sms',
+        body: 'This is a test',
+        delivery: 'error',
+        timestamp: new Date()
+      });
+      ThreadUI.appendMessage({
+        id: 45,
+        type: 'sms',
+        body: 'This is another test',
+        delivery: 'sent',
+        timestamp: new Date()
+      });
+      sinon.stub(window, 'confirm');
+      sinon.stub(ThreadUI, 'resendMessage');
+      this.elems = {
+        errorMsg: ThreadUI.container.querySelector('.error'),
+        sentMsg: ThreadUI.container.querySelector('.sent')
+      };
+    });
+    teardown(function() {
+      window.confirm.restore();
+      ThreadUI.resendMessage.restore();
+    });
+    test('clicking on an error message bubble triggers a confirmation dialog',
+      function() {
+      this.elems.errorMsg.querySelector('.bubble').click();
+      assert.equal(window.confirm.callCount, 1);
+    });
+    test('clicking within an error message bubble triggers a confirmation ' +
+      'dialog', function() {
+      this.elems.errorMsg.querySelector('.bubble *').click();
+      assert.equal(window.confirm.callCount, 1);
+    });
+    test('clicking on an error message does not trigger a confirmation dialog',
+      function() {
+      this.elems.errorMsg.click();
+      assert.equal(window.confirm.callCount, 0);
+    });
+    test('clicking on an error message bubble and accepting the ' +
+      'confirmation dialog triggers a message re-send operation', function() {
+      window.confirm.returns(true);
+      this.elems.errorMsg.querySelector('.bubble').click();
+      assert.equal(ThreadUI.resendMessage.callCount, 1);
+    });
+    test('clicking on an error message bubble and rejecting the ' +
+      'confirmation dialog does not trigger a message re-send operation',
+      function() {
+      window.confirm.returns(false);
+      this.elems.errorMsg.querySelector('.bubble').click();
+      assert.equal(ThreadUI.resendMessage.callCount, 0);
+    });
+    test('clicking on a sent message does not trigger a confirmation dialog ' +
+      'nor a message re-send operation', function() {
+      this.elems.sentMsg.click();
+      assert.equal(window.confirm.callCount, 0);
+      assert.equal(ThreadUI.resendMessage.callCount, 0);
+    });
+  });
+
   suite('createMmsContent', function() {
     test('generated html', function() {
       var inputArray = [{

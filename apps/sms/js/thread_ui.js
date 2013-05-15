@@ -950,21 +950,31 @@ var ThreadUI = global.ThreadUI = {
   handleMessageClick: function thui_handleMessageClick(evt) {
     var currentNode = evt.target;
     var inBubble = false;
-    var messageDOM;
+    var elems = {};
 
-    while (currentNode && currentNode.classList && !currentNode.classList.contains('message')) {
-      inBubble |= currentNode.classList.contains('bubble');
+    // Walk up the DOM, inspecting all the elements
+    while (currentNode && currentNode.classList) {
+      if (currentNode.classList.contains('bubble')) {
+        elems.bubble = currentNode;
+      } else if (currentNode.classList.contains('message')) {
+        elems.message = currentNode;
+      }
       currentNode = currentNode.parentNode;
     }
-    if (!currentNode || !currentNode.classList) {
+
+    // Click event handlers that occur outside of a message element should be
+    // defined elsewhere.
+    if (!elems.message) {
       return;
     }
-    messageDOM = currentNode;
 
-    if (inBubble && messageDOM.classList.contains('error')) {
+    // Click events originating from within a "bubble" of an error message
+    // should trigger a prompt for retransmission.
+    if (elems.bubble && elems.message.classList.contains('error')) {
       if (window.confirm(navigator.mozL10n.get('resend-confirmation'))) {
-        this.resendMessage(messageDOM.dataset.messageId);
+        this.resendMessage(elems.message.dataset.messageId);
       }
+      return;
     }
   },
 
