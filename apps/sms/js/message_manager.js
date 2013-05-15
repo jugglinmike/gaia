@@ -320,7 +320,7 @@ var MessageManager = {
     } else if (Array.isArray(msgContent)) { // send MMS
       var msg = SMIL.generate(msgContent);
       req = this._mozMobileMessage.sendMMS({
-        receivers: [number],
+        receivers: number,
         subject: '',
         smil: msg.smil,
         attachments: msg.attachments
