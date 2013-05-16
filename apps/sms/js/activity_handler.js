@@ -83,18 +83,62 @@ function showThreadFromSystemMessage(options) {
   }
 }
 
-window.navigator.mozSetMessageHandler('activity', function actHandle(activity) {
-  // XXX This lock is about https://github.com/mozilla-b2g/gaia/issues/5405
-  if (MessageManager.lockActivity)
-    return;
-  MessageManager.lockActivity = true;
-  activity.postResult({ status: 'accepted' });
-  var options = {
-    number: activity.source.data.number,
-    body: activity.source.data.body
-  };
-  showThreadFromSystemMessage(options);
-});
+var messagingActivity = {
+  // The Messaging application's global Activity handler. Delegates to specific
+  // handler based on the Activity name.
+  handler: function activityHandler(activity) {
+    var name = activity.source.name;
+    var handler = messagingActivity.handlers[name];
+
+    if (typeof handler === 'function') {
+      handler.apply(this, arguments);
+    } else {
+      console.error('Unrecognized activity: "' + name + '"');
+    }
+  },
+  // A mapping of MozActivity names to their associated event handler
+  handlers: {
+    'new': function newHandler(activity) {
+      // XXX This lock is about https://github.com/mozilla-b2g/gaia/issues/5405
+      if (MessageManager.lockActivity)
+        return;
+      MessageManager.lockActivity = true;
+      activity.postResult({ status: 'accepted' });
+      var options = {
+        number: activity.source.data.number,
+        body: activity.source.data.body
+      };
+      showThreadFromSystemMessage(options);
+    },
+    share: function shareHandler(activity) {
+      var blobs = activity.source.data.blobs,
+        names = activity.source.data.filenames;
+
+      function insertAttachments() {
+        console.log("INSERTING!");
+        window.removeEventListener('hashchange', insertAttachments);
+
+        blobs.forEach(function(blob, idx) {
+          var name = names[idx];
+          var attachment = new Attachment(blob, name);
+          Compose.append(attachment);
+        });
+      }
+
+      console.log("SHARE");
+      if (window.location.hash !== '#new') {
+        console.log("ASYNC");
+        window.addEventListener('hashchange', insertAttachments);
+        window.location.hash = '#new';
+      } else {
+        console.log("SYNC");
+        insertAttachments(false);
+      }
+    }
+  }
+};
+
+window.navigator.mozSetMessageHandler('activity', messagingActivity.handler);
 
 /* === Incoming SMS support === */
 
