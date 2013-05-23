@@ -770,6 +770,12 @@
         } else {
           // 2. Focus for fat fingering!
           //
+
+          // Ignore clicks that originated outside of the view
+          if (target !== view.outer && target !== view.inner) {
+            return;
+          }
+
           if (!view.inner.lastElementChild.isPlaceholder) {
             view.inner.appendChild(
               this.placeholder
