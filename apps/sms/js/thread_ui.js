@@ -521,10 +521,6 @@ var ThreadUI = global.ThreadUI = {
     var inputCss = window.getComputedStyle(this.input, null);
     var inputMaxHeight = parseInt(inputCss.getPropertyValue('max-height'), 10);
     var fontSize = Utils.getFontSize();
-    var verticalPadding =
-      (parseInt(inputCss.getPropertyValue('padding-top'), 10) +
-      parseInt(inputCss.getPropertyValue('padding-bottom'), 10)) /
-      fontSize;
     var buttonHeight = this.sendButton.offsetHeight;
 
     // Retrieve elements useful in growing method
@@ -532,35 +528,11 @@ var ThreadUI = global.ThreadUI = {
 
     // We need to grow the input step by step
     this.input.style.height = null;
-
-    // Updating the height if scroll is bigger that height
-    // This is when we have reached the header (UX requirement)
-    if (this.input.scrollHeight > inputMaxHeight) {
-      // Height of the input is the maximum
-      this.input.style.height = inputMaxHeight / fontSize + 'rem';
-      // Update the bottom bar height taking into account the padding
-      bottomBar.style.height =
-        inputMaxHeight / fontSize + verticalPadding + 'rem';
-      // We update the position of the button taking into account the
-      // new height
-      this.sendButton.style.marginTop = this.attachButton.style.marginTop =
-        (this.input.offsetHeight - buttonHeight) / fontSize + 'rem';
-      return;
-    }
-
-    // If the scroll height is smaller than original offset height, we keep
-    // offset height to keep original height, otherwise we use scroll height
-    // with additional margin for preventing scroll bar.
-    this.input.style.height =
-      this.input.offsetHeight > this.input.scrollHeight ?
-      this.input.offsetHeight / fontSize + 'rem' :
-      this.input.scrollHeight / fontSize + verticalPadding + 'rem';
-
     // We retrieve current height of the input
     var newHeight = this.input.getBoundingClientRect().height;
 
     // We calculate the height of the bottonBar which contains the input
-    var bottomBarHeight = (newHeight / fontSize + verticalPadding) + 'rem';
+    var bottomBarHeight = (newHeight / fontSize) + 'rem';
     bottomBar.style.height = bottomBarHeight;
 
     // We move the button to the right position
@@ -569,8 +541,6 @@ var ThreadUI = global.ThreadUI = {
     this.sendButton.style.marginTop = this.attachButton.style.marginTop =
       buttonOffset;
 
-    // Last adjustment to view taking into account the new height of the bar
-    this.container.style.bottom = bottomBarHeight;
     this.scrollViewToBottom();
   },
 

@@ -569,14 +569,9 @@ form.bottom[role="search"].messages-compose-form {
   background-image: url(images/paperclip-button.png);
 }
 
-#messages-compose-form {
-  max-height: 38rem;
-}
-
 #messages-compose-form [contentEditable] {
-  padding: 0.4rem 7rem 0.2rem 3.5rem;
+  padding: 1rem 7rem 1rem 3.5rem;
   line-height: 1.8rem !important;
-  min-height: 1.9rem;
   max-height: 37rem;
   /* Cursor hides itself otherwise: */
   overflow: auto;
@@ -586,7 +581,7 @@ form.bottom[role="search"].messages-compose-form {
 #messages-compose-form .placeholder[contentEditable]:after {
   color: #888;
   position: absolute;
-  top: 0.8rem;
+  top: 1rem;
   content: attr(placeholder);
   pointer-events: none;
 }
