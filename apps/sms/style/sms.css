@@ -583,10 +583,11 @@ form.bottom[role="search"].messages-compose-form {
 }
 
 #messages-compose-form [contentEditable] {
-  padding: 0.4rem 0.5rem 0.2rem 0.5rem;
-  line-height: 1.8rem !important;
+  padding: 1rem 0.5rem 1rem 0.5rem;
+  line-height: 1.8rem;
   min-height: 1.9rem;
   max-height: 37rem;
+  -moz-box-sizing: border-box;
   /* Cursor hides itself otherwise: */
   overflow: auto;
   text-align: left;
@@ -595,7 +596,7 @@ form.bottom[role="search"].messages-compose-form {
 #messages-compose-form .placeholder[contentEditable]:after {
   color: #888;
   position: absolute;
-  top: 0.8rem;
+  top: 1rem;
   content: attr(placeholder);
   pointer-events: none;
 }
