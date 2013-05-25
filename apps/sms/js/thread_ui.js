@@ -523,7 +523,6 @@ var ThreadUI = global.ThreadUI = {
     // First of all we retrieve all CSS info which we need
     var inputCss = window.getComputedStyle(this.input, null);
     var inputMaxHeight = parseInt(inputCss.getPropertyValue('max-height'), 10);
-    var verticalPadding = this.INPUT_PADDING;
     var buttonHeight = this.sendButton.offsetHeight;
 
     // Retrieve elements useful in growing method
@@ -535,10 +534,11 @@ var ThreadUI = global.ThreadUI = {
     // Updating the height if scroll is bigger that height
     // This is when we have reached the header (UX requirement)
     if (this.input.scrollHeight > inputMaxHeight) {
+      console.log("Special");
       // Height of the input is the maximum
       this.input.style.height = inputMaxHeight + 'px';
       // Update the bottom bar height taking into account the padding
-      bottomBar.style.height = (inputMaxHeight + verticalPadding) + 'px';
+      bottomBar.style.height = inputMaxHeight + 'px';
       // We update the position of the button taking into account the
       // new height
       this.sendButton.style.marginTop = this.attachButton.style.marginTop =
@@ -552,7 +552,7 @@ var ThreadUI = global.ThreadUI = {
     this.input.style.height =
       this.input.offsetHeight > this.input.scrollHeight ?
       this.input.offsetHeight + 'px' :
-      (this.input.scrollHeight + verticalPadding) + 'px';
+      this.input.scrollHeight + 'px';
 
     // We retrieve current height of the input
     var newHeight = this.input.getBoundingClientRect().height;
