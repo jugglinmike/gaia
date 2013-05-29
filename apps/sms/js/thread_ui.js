@@ -558,7 +558,7 @@ var ThreadUI = global.ThreadUI = {
     this.input.style.height =
       this.input.offsetHeight > this.input.scrollHeight ?
       this.input.offsetHeight + 'px' :
-      this.input.scrollHeight + 'px';
+      this.input.scrollHeight + 5 + 'px';
 
     // We retrieve current height of the input
     var newHeight = this.input.getBoundingClientRect().height + verticalMargin;
@@ -567,7 +567,7 @@ var ThreadUI = global.ThreadUI = {
     var bottomBarHeight = newHeight + 'px';
     bottomBar.style.height = bottomBarHeight;
 
-    // We move the buttons to  right position
+    // We move the buttons to the correct position
     var buttonOffset = (this.input.offsetHeight + verticalMargin - buttonHeight) + 'px';
     this.sendButton.style.marginTop = this.attachButton.style.marginTop =
       buttonOffset;
