@@ -591,11 +591,13 @@ form.bottom[role="search"].messages-compose-form {
 }
 
 #messages-compose-form [contentEditable] {
-  padding: 1rem 0.5rem 1rem 0.5rem;
+  padding: 0 0.5rem;
+  margin: 1rem 0;
   line-height: 1.8rem;
   min-height: 1.9rem;
-  max-height: 37rem;
+  max-height: 36rem;
   -moz-box-sizing: border-box;
+  border: solid 1px #a00;
   /* Cursor hides itself otherwise: */
   overflow: auto;
   text-align: left;
