@@ -535,10 +535,6 @@ var ThreadUI = global.ThreadUI = {
     // Updating the height if scroll is bigger that height
     // This is when we have reached the header (UX requirement)
     if (this.input.scrollHeight > inputMaxHeight) {
-      // TODO: Remove this--the CSS `max-height` attribute will limit the
-      // height of the input element in this case
-      // Height of the input is the maximum
-      this.input.style.height = inputMaxHeight + 'px';
       // Update the bottom bar height taking into account the padding
       bottomBar.style.height = (inputMaxHeight + verticalMargin) + 'px';
 
