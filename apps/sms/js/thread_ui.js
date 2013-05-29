@@ -193,8 +193,6 @@ var ThreadUI = global.ThreadUI = {
 
     // Cache fixed measurement while init
     var style = window.getComputedStyle(this.input, null);
-    this.INPUT_PADDING = parseInt(style.getPropertyValue('padding-top'), 10) +
-      parseInt(style.getPropertyValue('padding-bottom'), 10);
     this.INPUT_MARGIN = parseInt(style.getPropertyValue('margin-top'), 10) +
       parseInt(style.getPropertyValue('margin-bottom'), 10);
   },
@@ -384,9 +382,9 @@ var ThreadUI = global.ThreadUI = {
   setInputMaxHeight: function thui_setInputMaxHeight() {
     // Method for initializing the maximum height
     // Set the input height to:
-    // view height - (vertical padding (+ to field height if edit new message))
+    // view height - (vertical margin (+ to field height if edit new message))
     var viewHeight = this.container.offsetHeight;
-    var adjustment = this.INPUT_PADDING;
+    var adjustment = this.INPUT_MARGIN;
     if (window.location.hash === '#new') {
       adjustment += this.toField.offsetHeight;
     }
@@ -543,7 +541,6 @@ var ThreadUI = global.ThreadUI = {
       this.input.style.height = inputMaxHeight + 'px';
       // Update the bottom bar height taking into account the padding
       bottomBar.style.height = (inputMaxHeight + verticalMargin) + 'px';
-      this.container.style.bottom = (inputMaxHeight + verticalMargin - verticalMargin) + 'px';
 
       // We update the position of the button taking into account the
       // new height
@@ -558,19 +555,20 @@ var ThreadUI = global.ThreadUI = {
     this.input.style.height =
       this.input.offsetHeight > this.input.scrollHeight ?
       this.input.offsetHeight + 'px' :
-      this.input.scrollHeight + 5 + 'px';
+      this.input.scrollHeight + 'px';
 
-    // We retrieve current height of the input
+    // We calculate the current height of the input element (including margin)
     var newHeight = this.input.getBoundingClientRect().height + verticalMargin;
 
     // We calculate the height of the bottonBar which contains the input
     var bottomBarHeight = newHeight + 'px';
     bottomBar.style.height = bottomBarHeight;
 
-    // We move the buttons to the correct position
-    var buttonOffset = (this.input.offsetHeight + verticalMargin - buttonHeight) + 'px';
+    // We set the buttons' top margin to ensure they render at the bottom of
+    // the container
+    var buttonOffset = this.input.offsetHeight + verticalMargin - buttonHeight;
     this.sendButton.style.marginTop = this.attachButton.style.marginTop =
-      buttonOffset;
+      buttonOffset + 'px';
 
     // Last adjustment to view taking into account the new height of the bar
     this.container.style.bottom = bottomBarHeight;
