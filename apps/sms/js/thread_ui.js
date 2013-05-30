@@ -67,7 +67,7 @@ var ThreadUI = global.ThreadUI = {
 
     // Fields with 'messages' label
     [
-      'container', 'to-field', 'recipients-list',
+      'container', 'subheader', 'to-field', 'recipients-list',
       'header-text', 'recipient', 'input', 'compose-form',
       'check-all-button', 'uncheck-all-button',
       'contact-pick-button', 'back-button', 'send-button', 'attach-button',
@@ -203,6 +203,8 @@ var ThreadUI = global.ThreadUI = {
     var style = window.getComputedStyle(this.input, null);
     this.INPUT_MARGIN = parseInt(style.getPropertyValue('margin-top'), 10) +
       parseInt(style.getPropertyValue('margin-bottom'), 10);
+
+    ThreadUI.setInputMaxHeight();
   },
 
   // Initialize Recipients list and Recipients.View (DOM)
@@ -395,15 +397,14 @@ var ThreadUI = global.ThreadUI = {
     }
   },
 
+  // Limit the maximum height of the Compose input field such that it never
+  // grows larger than the space available.
   setInputMaxHeight: function thui_setInputMaxHeight() {
-    // Method for initializing the maximum height
-    // Set the input height to:
-    // view height - (vertical margin (+ to field height if edit new message))
     var viewHeight = this.container.offsetHeight;
-    var adjustment = this.INPUT_MARGIN;
-    if (window.location.hash === '#new') {
-      adjustment += this.toField.offsetHeight;
-    }
+    // Account for the vertical margin of the input field and the height of the
+    // absolutely-position sub-header element.
+    var adjustment = this.subheader.offsetHeight + this.INPUT_MARGIN;
+
     this.input.style.maxHeight = (viewHeight - adjustment) + 'px';
   },
 
