@@ -19,10 +19,11 @@
 
 'use strict';
 
-function Attachment(blob, name, origin) {
+function Attachment(blob, options) {
+  options = options || {};
   this.blob = blob;
-  this.name = name || '';
-  this.origin = origin;
+  this.name = options.name || '';
+  this.isDraft = !!options.isDraft;
 }
 
 Attachment.prototype = {
@@ -74,7 +75,7 @@ Attachment.prototype = {
     var size = Math.floor(this.size / 102.4) / 10;
     var sizeString = _('attachmentSize', {n: size});
     src += Utils.Template('attachment-tmpl').interpolate({
-      origin: this.origin,
+      draftClass: this.isDraft ? 'draft' : '',
       type: this.type,
       inlineStyle: inlineStyle,
       baseURL: baseURL,
