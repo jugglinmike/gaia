@@ -75,6 +75,7 @@ Attachment.prototype = {
     src += Utils.Template('attachment-tmpl').interpolate({
       inlineStyle: inlineStyle,
       baseURL: baseURL,
+      imgSrc: objectURL,
       type: this.type,
       size: sizeString
     });
