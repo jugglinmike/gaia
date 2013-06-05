@@ -351,26 +351,26 @@ section[role="region"].new > header:first-child form {
   background: #fff;
 }
 
-.article-list[data-type="list"] .mms-attachment[data-attachment-type='video'] {
+.article-list[data-type="list"] .attachment[data-attachment-type='video'] {
   width: 10.7rem;
   height: 8rem;
 }
 
-.article-list[data-type="list"] .mms-attachment[data-attachment-type='audio'] {
+.article-list[data-type="list"] .attachment[data-attachment-type='audio'] {
   width: 6rem;
   height: 6rem;
 }
 
-.article-list[data-type="list"] .message .mms-attachment {
+.article-list[data-type="list"] .message .attachment {
   display: block;
   margin: 1rem 0;
 }
 /* Attachments that occur at the bounds of an MMS message do not need
  * additional spacing. */
-#messages-container[data-type="list"] .message .mms-attachment:first-child {
+#messages-container[data-type="list"] .message .attachment:first-child {
   margin-top: 0;
 }
-#messages-container[data-type="list"] .message .mms-attachment:last-child {
+#messages-container[data-type="list"] .message .attachment:last-child {
   margin-bottom: 0;
 }
 
@@ -379,7 +379,7 @@ section[role="region"].new > header:first-child form {
   width: auto;
 }
 
-.article-list[data-type="list"] .message.outgoing .mms-attachment {
+.article-list[data-type="list"] .message.outgoing .attachment {
   margin-left: auto;
   margin-right: 0;
 }
@@ -584,7 +584,7 @@ form.bottom[role="search"].messages-compose-form {
   content: attr(placeholder);
   pointer-events: none;
 }
-.mms-attachment {
+.attachment {
   border: none;
   max-width: 10rem;
   max-height: 10rem;

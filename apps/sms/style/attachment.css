@@ -14,12 +14,14 @@ body {
   left: 0;
 
   padding: 0 0.4rem;
+  display: none;
 
   background: rgba(0, 0, 0, 0.6);
   color: rgb(255, 255, 255);
+  font-size: 1.5rem;
 }
 .draft .size-indicator {
-  display: none;
+  display: block;
 }
 
 .placeholder {
@@ -27,6 +29,7 @@ body {
   height: 100%;
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center center;
 }
 .video-placeholder {
   background-image: url('icons/video_thumb.png');

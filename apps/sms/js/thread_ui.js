@@ -873,7 +873,6 @@ var ThreadUI = global.ThreadUI = {
         var mediaElement = attachment.render();
         container.appendChild(mediaElement);
         attachmentMap.set(mediaElement, attachment);
-
       }
 
       if (attachment.text) {

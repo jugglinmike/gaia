@@ -55,7 +55,7 @@ Attachment.prototype = {
     // The attachment's iFrame requires access to the parent document's context
     // so that URIs for Blobs created in the parent may resolve as expected.
     el.setAttribute('sandbox', 'allow-same-origin');
-    el.className = 'mms-attachment';
+    el.className = 'attachment';
     el.dataset.attachmentType = this.type;
 
     // We special case audio to display an image of an audio attachment video
