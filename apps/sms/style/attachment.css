@@ -1,9 +1,11 @@
+html, body {
+  font-size: 10px;
+}
 body {
   font-family: 'Feura Sans', sans-serif;
 }
 .attachment {
   margin: 0;
-  font-size: 1rem;
 }
 .attachment img {
   width: 100%;

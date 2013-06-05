@@ -52,8 +52,11 @@ Attachment.prototype = {
     // The attachment's iFrame requires access to the parent document's context
     // so that URIs for Blobs created in the parent may resolve as expected.
     el.setAttribute('sandbox', 'allow-same-origin');
-    el.className = 'attachment mms-media';
+    el.className = 'mms-attachment';
 
+    // We special case audio to display an image of an audio attachment video
+    // currently falls through this path too, we should revisit this with
+    // Bug 869244 - [MMS] 'Thumbnail'/'Poster' in video attachment is needed.
     if (this.type === 'img') {
       tagName = 'img';
       objectURL = window.URL.createObjectURL(this.blob);

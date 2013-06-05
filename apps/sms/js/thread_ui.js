@@ -867,24 +867,11 @@ var ThreadUI = global.ThreadUI = {
 
       if (attachment.name && attachment.blob) {
         var type = Utils.typeFromMimeType(attachment.blob.type);
-        if (type) {
-          // we special case audio to display an image of an audio attachment
-          // video currently falls through this path too, we should revisit this
-          // with #869244
-          if (type === 'audio' || type === 'video') {
-            mediaElement = document.createElement('div');
-            mediaElement.className = type + '-placeholder';
-          } else {
-            mediaElement = document.createElement(type);
-            mediaElement.src = URL.createObjectURL(attachment.blob);
-            mediaElement.onload = function() {
-              URL.revokeObjectURL(this.src);
-            };
-          }
-          mediaElement.classList.add('mms-media');
-          container.appendChild(mediaElement);
-          attachmentMap.set(mediaElement, attachment);
-        }
+        var attachment = new Attachment(attachment.blob, attachment.name);
+        var mediaElement = attachment.render();
+        container.appendChild(mediaElement);
+        attachmentMap.set(mediaElement, attachment);
+
       }
 
       if (attachment.text) {
