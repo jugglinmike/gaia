@@ -3,15 +3,11 @@ html, body {
 }
 body {
   font-family: 'Feura Sans', sans-serif;
-}
-.attachment {
   margin: 0;
+  padding: 0;
 }
-.attachment img {
-  width: 100%;
-  height: 100%;
-}
-.attachment .size-indicator {
+
+.size-indicator {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -22,6 +18,10 @@ body {
   background: rgba(0, 0, 0, 0.6);
   color: rgb(255, 255, 255);
 }
+.local .size-indicator {
+  display: none;
+}
+
 .placeholder {
   width: 100%;
   height: 100%;

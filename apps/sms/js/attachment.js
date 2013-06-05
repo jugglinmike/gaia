@@ -19,9 +19,10 @@
 
 'use strict';
 
-function Attachment(blob, name) {
+function Attachment(blob, name, origin) {
   this.blob = blob;
   this.name = name || '';
+  this.origin = origin;
 }
 
 Attachment.prototype = {
@@ -73,10 +74,11 @@ Attachment.prototype = {
     var size = Math.floor(this.size / 102.4) / 10;
     var sizeString = _('attachmentSize', {n: size});
     src += Utils.Template('attachment-tmpl').interpolate({
+      origin: this.origin,
+      type: this.type,
       inlineStyle: inlineStyle,
       baseURL: baseURL,
       imgSrc: objectURL,
-      type: this.type,
       size: sizeString
     });
     el.src = src;

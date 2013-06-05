@@ -867,7 +867,7 @@ var ThreadUI = global.ThreadUI = {
 
       if (attachment.name && attachment.blob) {
         var type = Utils.typeFromMimeType(attachment.blob.type);
-        var attachment = new Attachment(attachment.blob, attachment.name);
+        var attachment = new Attachment(attachment.blob, attachment.name, 'remote');
         var mediaElement = attachment.render();
         container.appendChild(mediaElement);
         attachmentMap.set(mediaElement, attachment);
