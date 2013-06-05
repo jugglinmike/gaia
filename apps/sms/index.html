@@ -274,33 +274,13 @@
 
     <div id="attachment-tmpl" class="hide">
       <!--
-      <style>
-        body {
-          font-family: 'Feura Sans', sans-serif;
-        }
-        body.attachment {
-          margin: 0;
-          font-size: 1rem;
-        }
-        body.attachment img {
-          width: 100%;
-          height: 100%;
-        }
-        body.attachment div {
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          left: 0;
-
-          padding: 0 0.4rem;
-
-          background: rgba(0, 0, 0, 0.6);
-          color: rgb(255, 255, 255);
-        }
-      </style>
+      <head>
+        <base href="${baseURL}">
+        <link rel="stylesheet" type="text/css" href="style/attachment.css">
+      </head>
       <body class="attachment">
-        <img src="${uri}">
-        <div>${size}</div>
+        <${tagName} src="${uri}" class="${placeholderClass}">
+        <div class="size-indicator">${size}</div>
       </body>
       -->
     </div>

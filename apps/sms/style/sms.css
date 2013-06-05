@@ -371,35 +371,7 @@ section[role="region"].new > header:first-child form {
   width: auto;
 }
 
-.article-list[data-type="list"] .message.mms .video-placeholder {
-  display: block;
-  width: 10.7rem;
-  height: 8rem;
-  background-image: url('icons/video_thumb.png');
-  background-size: 100%;
-}
-
-.article-list[data-type="list"] .message.mms .audio-placeholder {
-  display: block;
-  width: 6rem;
-  height: 6rem;
-  background-image: url('icons/audio_thumb.png');
-  background-size: 100%;
-}
-
-.article-list[data-type="list"] .message.mms .video-placeholder:active,
-.article-list[data-type="list"] .message.mms .video-placeholder:hover {
-  background-position: 0 -8rem;
-}
-
-.article-list[data-type="list"] .message.mms .audio-placeholder:active,
-.article-list[data-type="list"] .message.mms .audio-placeholder:hover {
-  background-position: 0 -6rem;
-}
-
-.article-list[data-type="list"] .message.outgoing .mms-media,
-.article-list[data-type="list"] .message.outgoing .video-placeholder,
-.article-list[data-type="list"] .message.outgoing .audio-placeholder {
+.article-list[data-type="list"] .message.outgoing .mms-media {
   margin-left: auto;
   margin-right: 0;
 }

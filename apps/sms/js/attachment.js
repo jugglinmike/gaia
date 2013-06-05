@@ -33,7 +33,9 @@ Attachment.prototype = {
   },
   handleLoad: function(objectURL, event) {
     // Signal Gecko to release the reference to the Blob
-    URL.revokeObjectURL(objectURL);
+    if (objectURL) {
+      URL.revokeObjectURL(objectURL);
+    }
 
     // Bubble click events from inside the iframe
     event.target.contentDocument.addEventListener('click',
@@ -45,12 +47,20 @@ Attachment.prototype = {
   },
   render: function() {
     var el = document.createElement('iframe');
+    var objectURL, tagName, placeholderClass;
 
     // The attachment's iFrame requires access to the parent document's context
     // so that URIs for Blobs created in the parent may resolve as expected.
     el.setAttribute('sandbox', 'allow-same-origin');
-    el.className = 'attachment';
-    var objectURL = window.URL.createObjectURL(this.blob);
+    el.className = 'attachment mms-media';
+
+    if (this.type === 'img') {
+      tagName = 'img';
+      objectURL = window.URL.createObjectURL(this.blob);
+    } else {
+      tagName = 'div';
+      placeholderClass = this.type + '-placeholder';
+    }
 
     // When rendering is complete
     el.addEventListener('load', this.handleLoad.bind(this, objectURL));
@@ -62,6 +72,9 @@ Attachment.prototype = {
     var sizeString = _('attachmentSize', {n: size});
     src += Utils.Template('attachment-tmpl').interpolate({
       uri: objectURL,
+      baseURL: location.origin,
+      tagName: tagName,
+      placeholderClass: placeholderClass,
       size: sizeString
     });
     el.src = src;
