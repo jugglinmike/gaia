@@ -351,6 +351,16 @@ section[role="region"].new > header:first-child form {
   background: #fff;
 }
 
+.article-list[data-type="list"] .mms-attachment[data-attachment-type='video'] {
+  width: 10.7rem;
+  height: 8rem;
+}
+
+.article-list[data-type="list"] .mms-attachment[data-attachment-type='audio'] {
+  width: 6rem;
+  height: 6rem;
+}
+
 .article-list[data-type="list"] .message .mms-attachment {
   display: block;
   margin: 1rem 0;

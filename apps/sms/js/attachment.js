@@ -47,22 +47,21 @@ Attachment.prototype = {
   },
   render: function() {
     var el = document.createElement('iframe');
-    var objectURL, tagName, placeholderClass;
+    var baseURL = location.protocol + "//" + location.host;
+    var objectURL, inlineStyle;
 
     // The attachment's iFrame requires access to the parent document's context
     // so that URIs for Blobs created in the parent may resolve as expected.
     el.setAttribute('sandbox', 'allow-same-origin');
     el.className = 'mms-attachment';
+    el.dataset.attachmentType = this.type;
 
     // We special case audio to display an image of an audio attachment video
     // currently falls through this path too, we should revisit this with
     // Bug 869244 - [MMS] 'Thumbnail'/'Poster' in video attachment is needed.
     if (this.type === 'img') {
-      tagName = 'img';
       objectURL = window.URL.createObjectURL(this.blob);
-    } else {
-      tagName = 'div';
-      placeholderClass = this.type + '-placeholder';
+      inlineStyle = 'background-image: url(' + objectURL + ');';
     }
 
     // When rendering is complete
@@ -74,10 +73,9 @@ Attachment.prototype = {
     var size = Math.floor(this.size / 102.4) / 10;
     var sizeString = _('attachmentSize', {n: size});
     src += Utils.Template('attachment-tmpl').interpolate({
-      uri: objectURL,
-      baseURL: location.origin,
-      tagName: tagName,
-      placeholderClass: placeholderClass,
+      inlineStyle: inlineStyle,
+      baseURL: baseURL,
+      type: this.type,
       size: sizeString
     });
     el.src = src;
