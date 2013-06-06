@@ -60,8 +60,9 @@ Attachment.prototype = {
   },
   render: function() {
     var el = document.createElement('iframe');
-    var baseURL = location.protocol + "//" + location.host;
-    var objectURL, inlineStyle;
+    var baseURL = location.protocol + '//' + location.host;
+    var inlineStyle = '';
+    var objectURL;
 
     // The attachment's iFrame requires access to the parent document's context
     // so that URIs for Blobs created in the parent may resolve as expected.

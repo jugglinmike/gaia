@@ -75,7 +75,8 @@ var ActivityHandler = {
 
         blobs.forEach(function(blob, idx) {
           var attachment = new Attachment(blob, {
-            name: names[idx]
+            name: names[idx],
+            isDraft: true
           });
           Compose.append(attachment);
         });
