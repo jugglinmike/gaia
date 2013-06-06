@@ -862,24 +862,23 @@ var ThreadUI = global.ThreadUI = {
 
   createMmsContent: function thui_createMmsContent(dataArray) {
     var container = document.createDocumentFragment();
-    dataArray.forEach(function(attachment) {
+    dataArray.forEach(function(messageData) {
       var mediaElement, textElement;
 
-      if (attachment.name && attachment.blob) {
-        var type = Utils.typeFromMimeType(attachment.blob.type);
-        var attachment = new Attachment(attachment.blob, {
-          name: attachment.name
+      if (messageData.name && messageData.blob) {
+        var attachment = new Attachment(messageData.blob, {
+          name: messageData.name
         });
         var mediaElement = attachment.render();
         container.appendChild(mediaElement);
         attachmentMap.set(mediaElement, attachment);
       }
 
-      if (attachment.text) {
+      if (messageData.text) {
         textElement = document.createElement('span');
 
         // escape text for html and look for clickable numbers, etc.
-        var text = Utils.escapeHTML(attachment.text);
+        var text = Utils.escapeHTML(messageData.text);
         text = LinkHelper.searchAndLinkClickableData(text);
 
         textElement.innerHTML = text;
