@@ -35,8 +35,19 @@ Attachment.prototype = {
   },
   handleLoad: function(objectURL, event) {
     // Signal Gecko to release the reference to the Blob
+    // Because image attachments are rendered with the CSS `background-image`
+    // property, the time required to render such attachments is
+    // non-deterministic (even when the same image is loaded in parallel via an
+    // "img" tag). This timeout represents a conservative delay to wait before
+    // freeing the memory associated with the Object URL.
+    // TODO: Factor out this delay when implementing Attachment thumbnail
+    // images in the following bug:
+    // Bug 876467 - [mms] generate, store, and reuse thumbnails to display the
+    // images
     if (objectURL) {
-      URL.revokeObjectURL(objectURL);
+      setTimeout(function() {
+        URL.revokeObjectURL(objectURL);
+      }, 1000);
     }
 
     // Bubble click events from inside the iframe
