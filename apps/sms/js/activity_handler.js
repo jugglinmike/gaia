@@ -34,13 +34,6 @@ var ActivityHandler = {
   _handlers: {
     'new': function newHandler(activity) {
 
-      // XXX This lock is about https://github.com/mozilla-b2g/gaia/issues/5405
-      if (MessageManager.activity.isLocked) {
-        return;
-      }
-
-      MessageManager.activity.isLocked = true;
-
       var number = activity.source.data.number;
       var body = activity.source.data.body;
 
@@ -163,7 +156,15 @@ var ActivityHandler = {
         MessageManager.activity.contact = contact || null;
 
         // Move to new message
-        window.location.hash = '#new';
+        // TODO: Abstract this pattern to a new method,
+        // `MessageManager.navigate`, and update all logic that modifies
+        // `window.location.hash` directly to instead use this method.
+        // Bug 881469 - [MMS] Navigation logic is brittle
+        if (window.location.hash === '#new') {
+          MessageManager.onHashChange({});
+        } else {
+          window.location.hash = '#new';
+        }
         return;
       }
       var locationHash = window.location.hash;
@@ -172,21 +173,17 @@ var ActivityHandler = {
         case '#thread-list':
         case '#new':
           window.location.hash = threadHash;
-          MessageManager.activity.isLocked = false;
           break;
         default:
           if (locationHash.indexOf('#thread=') !== -1) {
-            // Don't switch back to thread list if we're
-            // already displaying the requested threadId.
-            if (locationHash === threadHash) {
-              MessageManager.activity.isLocked = false;
-            } else {
+            // Don't switch back to thread list if we're already displaying the
+            // requested threadId.
+            if (locationHash !== threadHash) {
               MessageManager.activity.threadId = threadId;
               window.location.hash = '#thread-list';
             }
           } else {
             window.location.hash = threadHash;
-            MessageManager.activity.isLocked = false;
           }
           break;
       }

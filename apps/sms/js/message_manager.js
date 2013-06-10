@@ -10,8 +10,7 @@ var MessageManager = {
     number: null,
     contact: null,
     recipients: null,
-    threadId: null,
-    isLocked: false
+    threadId: null
   },
 
   init: function mm_init(callback) {
@@ -262,7 +261,6 @@ var MessageManager = {
               window.location.hash =
                 '#thread=' + MessageManager.activity.threadId;
               MessageManager.activity.threadId = null;
-              MessageManager.activity.isLocked = false;
             }
           });
         }

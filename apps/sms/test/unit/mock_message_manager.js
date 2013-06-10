@@ -20,8 +20,7 @@ MockMessageManager.mSetup = function() {
     number: null,
     contact: null,
     recipients: null,
-    threadId: null,
-    isLocked: false
+    threadId: null
   };
 };
 
