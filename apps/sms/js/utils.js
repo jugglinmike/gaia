@@ -171,8 +171,9 @@
           // Convert the tel-type to string before tel-type comparison.
           // TODO : We might need to handle multiple tel type in the future.
           for (i = 0; i < length; i++) {
-            var telType = contact.tel[i].type && contact.tel[i].type.toString();
-            var phoneType = phone.type && phone.type.toString();
+            // tel[n].type may be null
+            var telType = (contact.tel[i].type || '').toString();
+            var phoneType = (phone.type || '').toString();
             if (contact.tel[i].value !== phone.value &&
                 telType === phoneType &&
                 contact.tel[i].carrier === phone.carrier) {

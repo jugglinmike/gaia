@@ -52,7 +52,8 @@ var ThreadUI = global.ThreadUI = {
   init: function thui_init() {
     var _ = navigator.mozL10n.get;
     var templateIds = [
-      'contact', 'number', 'highlight', 'message', 'not-downloaded', 'recipient'
+      'contact', 'number', 'highlight', 'message',
+      'not-downloaded', 'recipient', 'sender'
     ];
 
     Compose.init('messages-compose-form');
@@ -889,6 +890,8 @@ var ThreadUI = global.ThreadUI = {
   renderMessages: function thui_renderMessages(filter, callback) {
     // We initialize all params before rendering
     this.initializeRendering();
+    this.buildMessageDOM.lastSender = '';
+
     // We call getMessages with callbacks
     var self = this;
     var onMessagesRendered = function messagesRendered() {
@@ -978,13 +981,17 @@ var ThreadUI = global.ThreadUI = {
   },
 
   buildMessageDOM: function thui_buildMessageDOM(message, hidden) {
+    var name = '';
     var bodyHTML = '';
+    var senderHTML = '';
     var delivery = message.delivery;
+    var thread = Threads.get(message.threadId);
     var messageDOM = document.createElement('li');
-
     var classNames = ['message', message.type, delivery];
-
     var notDownloaded = delivery === 'not-downloaded';
+    var details = Utils.getContactDetails(
+      message.sender, Contacts.get(message.sender)
+    );
 
     if (delivery === 'received' || notDownloaded) {
       classNames.push('incoming');
@@ -995,6 +1002,17 @@ var ThreadUI = global.ThreadUI = {
     if (hidden) {
       classNames.push('hidden');
     }
+
+    if (this.buildMessageDOM.lastSender !== message.sender &&
+      thread.participants.length > 1) {
+
+      this.buildMessageDOM.lastSender = message.sender;
+      senderHTML = this.tmpl.sender.interpolate({
+        time: Utils.getFormattedHour(message.timestamp),
+        name: Utils.escapeHTML(details.title || message.sender)
+      });
+    }
+
 
     if (message.type && message.type === 'sms') {
       bodyHTML = LinkHelper.searchAndLinkClickableData(message.body);
@@ -1010,9 +1028,10 @@ var ThreadUI = global.ThreadUI = {
 
     messageDOM.innerHTML = this.tmpl.message.interpolate({
       id: String(message.id),
+      senderHTML: senderHTML,
       bodyHTML: bodyHTML
     }, {
-      safe: ['bodyHTML']
+      safe: ['senderHTML', 'bodyHTML']
     });
 
     if (message.type === 'mms' && !notDownloaded) { // MMS
@@ -1849,6 +1868,8 @@ Object.defineProperty(ThreadUI, 'selectedInputs', {
     return this.getSelectedInputs();
   }
 });
+
+ThreadUI.buildMessageDOM.lastSender = '';
 
 ThreadUI.groupView.reset = function groupViewReset() {
   // Hide the group view

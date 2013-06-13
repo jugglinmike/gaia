@@ -67,6 +67,8 @@
   }
 
   var rspaces = /\s+/;
+  var contacts = new Map();
+  var cursor;
 
   var Contacts = {
     findBy: function contacts_findBy(filter, callback) {
@@ -187,12 +189,58 @@
       }, callback);
     },
     findByPhoneNumber: function contacts_findByPhone(filterValue, callback) {
+      // TODO: Look in locally cached contacts
       return this.findBy({
         filterBy: ['tel'],
         filterOp: 'match',
         filterValue: filterValue
       }, callback);
+    },
+
+    // Locally stored contacts access
+    get: function contacts_get(phone) {
+      return contacts.get(String(phone));
+    },
+    set: function contacts_set(phone, record) {
+      var variants;
+
+      // Create a cache entry for phone variants
+      if (!Contacts.has(phone)) {
+        variants = SimplePhoneMatcher.generateVariants(phone);
+
+        for (var val of variants) {
+          contacts.set(String(val), record);
+        }
+        return;
+      }
+
+      return contacts.set(String(phone), record);
+    },
+    has: function contacts_has(phone) {
+      return contacts.has(String(phone));
+    },
+    delete: function contacts_delete(phone) {
+      return contacts.delete(String(phone));
     }
+  };
+
+
+  // Cache updating
+  navigator.mozContacts.oncontactchange = function(event) {
+    var filter = {
+      filterBy: ['id'],
+      filterOp: 'equals',
+      filterValue: event.contactID
+    };
+    Contacts.findBy(filter, function(records) {
+      var contact = (records && records.length && records[0]) || null;
+      for (var tel of contact.tel) {
+        if (Contacts.has(tel.value)) {
+          Contacts.delete(tel.value);
+          Contacts.set(tel.value, contact);
+        }
+      }
+    });
   };
 
   exports.Contacts = Contacts;

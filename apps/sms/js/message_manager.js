@@ -322,6 +322,21 @@ var MessageManager = {
         // Register all threads to the Threads object.
         Threads.set(this.result.id, this.result);
 
+        // Each participant contact will be cached locally (once per contact)
+        // By using the "participant" entry (ie. the number) we may have
+        // > 1 "participant" pointing to the same contact.
+        this.result.participants.forEach(function(participant) {
+          if (!Contacts.has(participant)) {
+            Contacts.findByPhoneNumber(participant, function(records) {
+              var contact = (records && records.length && records[0]) || null;
+              // Don't cache unknown participants
+              if (contact) {
+                Contacts.set(participant, contact);
+              }
+            });
+          }
+        });
+
         // If one of the requested threads is also the
         // currently displayed thread, update the header immediately
         if (this.result.id === Threads.currentId) {

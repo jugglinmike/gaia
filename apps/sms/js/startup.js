@@ -3,21 +3,19 @@
 
 'use strict';
 
-var lazyLoadFiles = [
+var files = [
   'shared/js/async_storage.js',
   'shared/js/l10n_date.js',
   'shared/js/custom_dialog.js',
   'shared/js/notification_helper.js',
   'shared/js/gesture_detector.js',
+  'shared/js/simple_phone_matcher.js',
   'js/blacklist.js',
   'js/contacts.js',
   'js/recipients.js',
   'js/threads.js',
-  'js/message_manager.js',
   'js/attachment.js',
   'js/attachment_menu.js',
-  'js/thread_list_ui.js',
-  'js/thread_ui.js',
   'js/compose.js',
   'js/waiting_screen.js',
   'js/utils.js',
@@ -29,6 +27,9 @@ var lazyLoadFiles = [
   'js/link_action_handler.js',
   'js/settings.js',
   'js/activity_handler.js',
+  'js/thread_list_ui.js',
+  'js/thread_ui.js',
+  'js/message_manager.js',
   'shared/style/input_areas.css',
   'shared/style/switches.css',
   'shared/style/confirm.css',
@@ -62,14 +63,10 @@ window.addEventListener('load', function() {
   }
 
   navigator.mozL10n.ready(function waitLocalizedForLoading() {
-    LazyLoader.load(lazyLoadFiles, function() {
-      if (!navigator.mozMobileMessage) {
-        var mocks = ['js/desktop_sms_mock.js', 'js/desktop_contacts_mock.js'];
-        LazyLoader.load(mocks, function() {
-          MessageManager.init(initUIApp);
-        });
-        return;
-      }
+    if (!navigator.mozMobileMessage) {
+      files.unshift('js/desktop_sms_mock.js', 'js/desktop_contacts_mock.js');
+    }
+    LazyLoader.load(files, function() {
       MessageManager.init(initUIApp);
     });
   });
