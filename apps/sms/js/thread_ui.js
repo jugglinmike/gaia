@@ -488,9 +488,16 @@ var ThreadUI = global.ThreadUI = {
   // grows larger than the space available.
   setInputMaxHeight: function thui_setInputMaxHeight() {
     var viewHeight = this.container.offsetHeight;
-    // Account for the vertical margin of the input field and the height of the
-    // absolutely-position sub-header element.
-    var adjustment = this.subheader.offsetHeight + this.INPUT_MARGIN;
+    var threadSliverHeight = 30;
+    // The max height should be constrained by the following factors:
+    var adjustment =
+      // The height of the absolutely-position sub-header element
+      this.subheader.offsetHeight +
+      // The vertical margin of the input field
+      this.INPUT_MARGIN +
+      // An artificial spacing to prevent the input field from completely
+      // occluding the message thread
+      threadSliverHeight;
 
     this.input.style.maxHeight = (viewHeight - adjustment) + 'px';
   },
@@ -662,6 +669,12 @@ var ThreadUI = global.ThreadUI = {
         newHeight;
       composeForm.style.height = newHeight + 'px';
 
+      // Set the bottom border of the container so the Compose field does not
+      // occlude the messages. `padding-bottom` is not used because it is
+      // applied at the content edge, not after any overflow (see Bug 748518 -
+      // padding-bottom is ignored with overflow:auto;)
+      this.container.style.borderBottomWidth = newHeight + 'px';
+
       // We update the position of the button taking into account the
       // new height
       this.sendButton.style.marginTop = this.attachButton.style.marginTop =
@@ -682,6 +695,12 @@ var ThreadUI = global.ThreadUI = {
 
     // We calculate the height of the Compose form which contains the input
     composeForm.style.height = newHeight + 'px';
+
+    // Set the bottom border of the container so the Compose field does not
+    // occlude the messages. `padding-bottom` is not used because it is applied
+    // at the content edge, not after any overflow (see Bug 748518 -
+    // padding-bottom is ignored with overflow:auto;)
+    this.container.style.borderBottomWidth = newHeight + 'px';
 
     // We set the buttons' top margin to ensure they render at the bottom of
     // the container
