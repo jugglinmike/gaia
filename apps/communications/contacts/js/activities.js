@@ -56,8 +56,18 @@ var ActivityHandler = {
         if (!this._launchedAsInlineActivity)
           return;
 
+        //setTimeout(function() {
         this._currentActivity = activity;
-        Contacts.navigation.home();
+        contacts.List.getAllContacts(function() {
+        }, function() {
+          this._currentActivity = activity;
+          Contacts.navigation.home();
+          Contacts.checkCancelableActivity();
+        }.bind(this));
+        //}.bind(this), 1000);
+        //this._currentActivity = activity;
+        //Contacts.navigation.home();
+        return;
         break;
     }
     Contacts.checkCancelableActivity();

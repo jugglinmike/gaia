@@ -700,13 +700,18 @@ contacts.List = (function() {
           num++;
           cursor.continue();
         } else {
+          try {
           if (chunk.length)
             successCb(chunk);
-          onListRendered();
           var showNoContacs = (num === 0);
           toggleNoContactsScreen(showNoContacs);
-          dispatchCustomEvent('listRendered');
-          contactsLoadFinished = true;
+          if (!showNoContacs) {
+            onListRendered();
+            dispatchCustomEvent('listRendered');
+            contactsLoadFinished = true;
+          } else {
+          }
+          } catch (err) { console.log(err); }
         }
       };
       cursor.onerror = errorCb;
