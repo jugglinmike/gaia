@@ -513,10 +513,31 @@ var ThreadUI = global.ThreadUI = {
   // Limit the maximum height of the Compose input field such that it never
   // grows larger than the space available.
   setInputMaxHeight: function thui_setInputMaxHeight() {
-    var viewHeight = this.container.offsetHeight;
-    // Account for the vertical margin of the input field and the height of the
-    // absolutely-position sub-header element.
-    var adjustment = this.subheader.offsetHeight + this.INPUT_MARGIN;
+    var viewHeight, tmpBorderWidth;
+    var threadSliverHeight = 30;
+    // The max height should be constrained by the following factors:
+    var adjustment =
+      // The height of the absolutely-position sub-header element
+      this.subheader.offsetHeight +
+      // The vertical margin of the input field
+      this.INPUT_MARGIN;
+
+    // Further constrain the max height by an artificial spacing to prevent the
+    // input field from completely occluding the message thread (not necessary
+    // when creating a new thread).
+    if (window.location.hash !== '#new') {
+      adjustment += threadSliverHeight;
+    }
+
+    // The container's bottom border is used to offset the thread list as the
+    // input field grows. Because the container is using "box-sizing:
+    // border-box;", borders can have inconsistent effects on the value of the
+    // element's "clientHeight". Temporarily un-set the border to detect what
+    // the client height would be *without* the overridden bottom border.
+    tmpBorderWidth = this.container.style.borderBottomWidth;
+    this.container.style.borderBottomWidth = null;
+    viewHeight = this.container.offsetHeight;
+    this.container.style.borderBottomWidth = tmpBorderWidth;
 
     this.input.style.maxHeight = (viewHeight - adjustment) + 'px';
   },
@@ -688,6 +709,12 @@ var ThreadUI = global.ThreadUI = {
         newHeight;
       composeForm.style.height = newHeight + 'px';
 
+      // Set the bottom border of the container so the Compose field does not
+      // occlude the messages. `padding-bottom` is not used because it is
+      // applied at the content edge, not after any overflow (see "Bug 748518 -
+      // padding-bottom is ignored with overflow:auto;")
+      this.container.style.borderBottomWidth = newHeight + 'px';
+
       // We update the position of the button taking into account the
       // new height
       this.sendButton.style.marginTop = this.attachButton.style.marginTop =
@@ -708,6 +735,12 @@ var ThreadUI = global.ThreadUI = {
 
     // We calculate the height of the Compose form which contains the input
     composeForm.style.height = newHeight + 'px';
+
+    // Set the bottom border of the container so the Compose field does not
+    // occlude the messages. `padding-bottom` is not used because it is applied
+    // at the content edge, not after any overflow (see "Bug 748518 -
+    // padding-bottom is ignored with overflow:auto;")
+    this.container.style.borderBottomWidth = newHeight + 'px';
 
     // We set the buttons' top margin to ensure they render at the bottom of
     // the container
@@ -1175,7 +1208,13 @@ var ThreadUI = global.ThreadUI = {
   startEdit: function thui_edit() {
     this.inEditMode = true;
     this.cleanForm();
+
     this.mainWrapper.classList.toggle('edit');
+
+    // Ensure the Edit Mode menu does not occlude the final messages in the
+    // thread.
+    this.container.style.borderBottomWidth =
+      this.editForm.querySelector('menu').offsetHeight + 'px';
   },
 
   delete: function thui_delete() {
@@ -1215,6 +1254,7 @@ var ThreadUI = global.ThreadUI = {
 
   cancelEdit: function thlui_cancelEdit() {
     this.inEditMode = false;
+    this.updateInputHeight();
     this.mainWrapper.classList.remove('edit');
   },
 

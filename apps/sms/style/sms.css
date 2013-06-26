@@ -308,10 +308,17 @@ section.has-carrier .article-list header:first-child {
 }
 
 .article-list {
+  z-index: 5;
+
+  /* The bottom border is used to offset the messages as the Compose field
+   * grows and shrinks, preventing occlusion. (see "Bug 748518 - padding-bottom
+   * is ignored with overflow:auto;") */
+  border-bottom-color: transparent;
+  border-bottom-style: solid;
   -moz-box-sizing: border-box;
+
   background: none repeat scroll 0 0 #E4E4E4;
   text-align: left;
-  z-index: 5;
 }
 
 .article-list header {
@@ -326,7 +333,7 @@ section.has-carrier .article-list header:first-child {
 }
 
 .article-list[data-type="list"] > ul:last-child {
-  margin-bottom: 7rem;
+  margin-bottom: 0.5rem;
 }
 
 .article-list header,
