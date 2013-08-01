@@ -35,9 +35,7 @@ manifest.appcache
 /shared/test/integration/node_modules
 
 /b2g
-/profile/
-/profile-debug/
-/profile-test/
+/profile*/
 /profile.tar.gz
 /.xulrunner-url
 /xulrunner/
