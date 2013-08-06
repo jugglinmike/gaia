@@ -9,7 +9,9 @@ marionette('launch and switch to clock', function() {
     analogClock: '#analog-clock',
     digitalClock: '#digital-clock',
     alarmFormBtn: '#alarm-new',
-    alarmForm: '#alarm'
+    alarmForm: '#alarm',
+    alarmFormCloseBtn: '#alarm-close',
+    alarmCreateBtn: '#alarm-done'
   };
 
   setup(function() {
@@ -17,7 +19,11 @@ marionette('launch and switch to clock', function() {
     client.apps.switchToApp(CLOCK_ORIGIN);
     this.elems = {};
     Object.keys(selectors).forEach(function(key) {
-      this.elems[key] = client.findElement(selectors[key]);
+      Object.defineProperty(this.elems, key, {
+        get: function() {
+          return client.findElement(selectors[key]);
+        }
+      });
     }.bind(this));
   });
 
@@ -32,11 +38,9 @@ marionette('launch and switch to clock', function() {
       'Alarm form is not displayed');
 
     // TODO: Enable this test when "tap" action triggers a "touch start" event
-    // (currently, the Marionette JavaScript client models the "tap" Action as a
-    // "press" Action followed by a "release" Action, so "touch start" never
-    // occurs.
-    /*var subject = new Actions(client);
-    subject.tap(this.elems.analogClock).perform();
+    // (currently, Marionette models the "tap" Action as a "press" Action
+    // followed by a "release" Action, so "touch start" never occurs.
+    /*this.elems.analogClock.tap();
     assert.ok(!this.elems.analogClock.displayed(),
       'analog clock is not displayed after tap');
     assert.ok(this.elems.digitalClock.displayed(),
@@ -47,12 +51,26 @@ marionette('launch and switch to clock', function() {
 
     setup(function() {
       this.elems.alarmFormBtn.click();
-      assert.ok(this.elems.alarmForm.displayed(),
-        'Alarm form is displayed after clicking "New Alarm" button');
     });
 
-    test('this is a test', function(done) {
-      setTimeout(done, 2000);
+    test('default view', function() {
+      assert.ok(this.elems.alarmForm.displayed(), 'Alarm form is displayed');
+      client.waitFor(function() {
+        return this.elems.alarmCreateBtn.displayed();
+      }.bind(this));
+      assert.ok(this.elems.alarmCreateBtn.displayed(),
+        '"Create Alarm" button is displayed');
+    });
+
+    test('closinAg', function() {
+      this.elems.alarmFormCloseBtn.click();
+      assert.ok(this.elems.alarmFormBtn.displayed(),
+        '"New Alarm" button is displayed');
+      client.waitFor(function() {
+        return !this.elems.alarmForm.displayed();
+      }.bind(this));
+      assert.ok(!this.elems.alarmForm.displayed(),
+        'Alarm form is not displayed');
     });
 
   });
