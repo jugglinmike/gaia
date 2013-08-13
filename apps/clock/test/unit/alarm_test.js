@@ -1,11 +1,3 @@
-if (typeof asyncStorage === 'undefined') {
-  require('/shared/js/async_storage.js');
-}
-
-if (typeof loadBodyHTML === 'undefined') {
-  require('/shared/test/unit/load_body_html_helper.js');
-}
-
 requireApp('clock/js/alarmsdb.js');
 requireApp('clock/js/alarm_edit.js');
 requireApp('clock/js/alarm_list.js');
