@@ -11,8 +11,37 @@ marionette('launch and switch to clock', function() {
     alarmFormBtn: '#alarm-new',
     alarmForm: '#alarm',
     alarmFormCloseBtn: '#alarm-close',
-    alarmCreateBtn: '#alarm-done'
+    alarmCreateBtn: '#alarm-done',
+    alarmNameInput: '#edit-alarm [name="alarm.label"]',
+    timeInput: '#time-select',
+    alarmList: '#alarms',
+    alarmListItem: '.alarm-cell',
+    countdownBanner: '#banner-countdown'
   };
+
+  function padZeros(num) {
+    num = String(num);
+    while (num.length < 2) {
+      num = '0' + num;
+    }
+    return num;
+  }
+
+  function setValue(element, value) {
+    var type = element.getAttribute('type');
+    if (value instanceof Date) {
+      if (type === 'time') {
+        value = [value.getHours(), value.getMinutes(), value.getSeconds()]
+          .map(padZeros).join(':');
+      } else {
+        value = [values.date.getMonth() + 1, date.getDay(), date.getFullYear()]
+          .map(padZeros).join('-');
+      }
+    }
+    element.client.executeScript(function(elem, value) {
+      elem.value = value;
+    }, [element, value]);
+  }
 
   setup(function() {
     client.apps.launch(CLOCK_ORIGIN);
@@ -47,22 +76,75 @@ marionette('launch and switch to clock', function() {
       'digital clock is displayed after tap');*/
   });
 
-  suite('alarm creation', function() {
+  suite('New Alarm', function() {
 
     setup(function() {
       this.elems.alarmFormBtn.click();
-    });
-
-    test('default view', function() {
       assert.ok(this.elems.alarmForm.displayed(), 'Alarm form is displayed');
       client.waitFor(function() {
         return this.elems.alarmCreateBtn.displayed();
       }.bind(this));
-      assert.ok(this.elems.alarmCreateBtn.displayed(),
-        '"Create Alarm" button is displayed');
     });
 
-    test('closinAg', function() {
+    test('creation', function(done) {
+      var time = new Date();
+      var alarms;
+
+      time.setHours(3);
+      time.setMinutes(42);
+
+      assert.ok(
+        this.elems.alarmNameInput.displayed(),
+        'Alarm name input is displayed'
+      );
+
+      this.elems.alarmNameInput.sendKeys(['coffee break']);
+      setValue(this.elems.timeInput, time);
+
+      this.elems.alarmCreateBtn.click();
+
+      // The alarm form closes with an animation, so the test must be suspended
+      // until it is completely hidden.
+      client.waitFor(function() {
+        return !this.elems.alarmForm.displayed();
+      }.bind(this));
+
+      alarms = client.findElements(selectors.alarmListItem);
+
+      assert.equal(alarms.length, 1);
+      assert.ok(
+        alarms[0].text().indexOf('3:42') > -1,
+        'Alarm time is rendered'
+      );
+      assert.ok(
+        alarms[0].text().indexOf('coffee break'),
+        'Alarm title is rendered'
+      );
+      assert.ok(
+        this.elems.countdownBanner.displayed(),
+        'Countdown banner is displayed'
+      );
+
+      // TODO: The last test should ensure that the "Countdown banner" element
+      // is eventually hidden. Currently, the client hangs while polling with
+      // the supplied "waitFor" callback--the UI becomes unresponsive and the
+      // handler is no longer invoked.
+      /*this.timeout(20 * 1000);
+      client.waitFor(function() {
+        console.log("Waiting");
+        return !this.elems.countdownBanner.displayed();
+      }.bind(this), {
+        timeout: 20 * 1000
+      }, done);*/
+
+      done();
+    });
+
+    test('Closing form', function() {
+      assert.ok(this.elems.alarmFormCloseBtn.displayed(),
+        '"Close" button is displayed');
+
+      // Close alarm form
       this.elems.alarmFormCloseBtn.click();
       assert.ok(this.elems.alarmFormBtn.displayed(),
         '"New Alarm" button is displayed');
