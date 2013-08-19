@@ -88,10 +88,14 @@ marionette('launch and switch to clock', function() {
 
     test('creation', function(done) {
       var time = new Date();
+      // Allow for a longer timeout to account for the long-lived 'Countdown
+      // banner'.
+      var timeout = 10 * 1000;
       var alarms;
 
       time.setHours(3);
       time.setMinutes(42);
+      this.timeout(timeout);
 
       assert.ok(
         this.elems.alarmNameInput.displayed(),
@@ -125,19 +129,12 @@ marionette('launch and switch to clock', function() {
         'Countdown banner is displayed'
       );
 
-      // TODO: The last test should ensure that the "Countdown banner" element
-      // is eventually hidden. Currently, the client hangs while polling with
-      // the supplied "waitFor" callback--the UI becomes unresponsive and the
-      // handler is no longer invoked.
-      /*this.timeout(20 * 1000);
+      // Ensure that the 'Countdown banner' element is eventually hidden.
       client.waitFor(function() {
-        console.log("Waiting");
         return !this.elems.countdownBanner.displayed();
       }.bind(this), {
-        timeout: 20 * 1000
-      }, done);*/
-
-      done();
+        timeout: timeout
+      }, done);
     });
 
     test('Closing form', function() {
