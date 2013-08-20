@@ -1,7 +1,4 @@
-// TODO: Kill b2g instance when tests crash
-var Actions = require('marionette-client').Actions;
-
-marionette('launch and switch to clock', function() {
+marionette('Clock', function() {
   var CLOCK_ORIGIN = 'app://clock.gaiamobile.org';
   var assert = require('assert');
   var client = marionette.client();
@@ -19,14 +16,17 @@ marionette('launch and switch to clock', function() {
     countdownBanner: '#banner-countdown'
   };
 
-  function padZeros(num) {
-    num = String(num);
-    while (num.length < 2) {
-      num = '0' + num;
+  function padZeros(val) {
+    val = String(val);
+    while (val.length < 2) {
+      val = '0' + val;
     }
-    return num;
+    return val;
   }
 
+  // Set the value of a given input element. Encapsulates logic for setting
+  // "time" and "date" input elements (which is currently unsupported by
+  // Marionette).
   function setValue(element, value) {
     var type = element.getAttribute('type');
     if (value instanceof Date) {
@@ -56,7 +56,7 @@ marionette('launch and switch to clock', function() {
     }.bind(this));
   });
 
-  test('default clock view', function() {
+  test('Default View', function() {
     assert.ok(this.elems.analogClock.displayed(),
       'analog clock is displayed');
     assert.ok(!this.elems.digitalClock.displayed(),
@@ -83,7 +83,7 @@ marionette('launch and switch to clock', function() {
       }.bind(this));
     });
 
-    test('creation', function(done) {
+    test('Creation', function() {
       var time = new Date();
       // Allow for a longer timeout to account for the long-lived 'Countdown
       // banner'.
@@ -131,7 +131,7 @@ marionette('launch and switch to clock', function() {
         return !this.elems.countdownBanner.displayed();
       }.bind(this), {
         timeout: timeout
-      }, done);
+      });
     });
 
     test('Closing form', function() {
