@@ -66,14 +66,11 @@ marionette('launch and switch to clock', function() {
     assert.ok(!this.elems.alarmForm.displayed(),
       'Alarm form is not displayed');
 
-    // TODO: Enable this test when "tap" action triggers a "touch start" event
-    // (currently, Marionette models the "tap" Action as a "press" Action
-    // followed by a "release" Action, so "touch start" never occurs.
-    /*this.elems.analogClock.tap();
+    this.elems.analogClock.tap();
     assert.ok(!this.elems.analogClock.displayed(),
       'analog clock is not displayed after tap');
     assert.ok(this.elems.digitalClock.displayed(),
-      'digital clock is displayed after tap');*/
+      'digital clock is displayed after tap');
   });
 
   suite('New Alarm', function() {
