@@ -93,25 +93,9 @@ ul#timer-edit li:first-child {
   top: 1.5rem;
   left: 0;
 }
-
-ul li label {
-  text-transform: none;
-}
-
-ul li > label:not([for]),
-ul li > label.pack-checkbox,
-ul li > label.pack-radio,
-ul li > label.pack-switch {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-ul li > label.pack-checkbox > span,
-ul li > label.pack-radio > span,
-ul li > label.pack-switch > input + span {
-  left: auto !important;
-  right: 0 !important;
-}
+/* I can't tell for sure if the rules that were here are necessary for the
+ * correct rendering of the Timer panel, but they were too general and
+ * negatively effected the rendering of elements in the Alarm panel
+ * (specifically, the checkboxes in the alarm list and the labels for input
+ * elements in the "New Alarm" view).
+ */

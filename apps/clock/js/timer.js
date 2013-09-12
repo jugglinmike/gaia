@@ -275,8 +275,11 @@ Timer.Panel.prototype = {
    * @return {Object} Timer.Panel.
    */
   dialog: function(opts = { isVisible: true }) {
-    this.picker.refresh();
     View.instance(this.nodes.dialog).visible = opts.isVisible;
+    // Totally unsatisfying. Need to find a better way to do this.
+    // Motivation:
+    // https://github.com/jugglinmike/gaia/blob/9831610039e2fc88bc3214ca9d5073726ec09839/apps/clock/js/picker/value_picker.js#L124
+    setTimeout(this.picker.refresh.bind(this.picker), 0);
     return this;
   },
 
