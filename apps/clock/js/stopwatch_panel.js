@@ -180,5 +180,5 @@ define(function(require) {
     }
   };
 
-  return StopwatchPanel;
+  return Stopwatch.Panel;
 });

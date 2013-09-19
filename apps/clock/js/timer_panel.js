@@ -249,4 +249,5 @@ Timer.Panel.prototype.onclick = function(event) {
   }
 };
 
-}(Timer, Panel));
+return Timer.Panel;
+});
