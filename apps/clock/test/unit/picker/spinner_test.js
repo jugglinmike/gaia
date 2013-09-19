@@ -1,13 +1,12 @@
-'use strict';
-requireApp('clock/js/picker/spinner.js');
-mocha.setup({ globals: ['GestureDetector', 'Template'] });
-
 suite('Spinner', function() {
-  var created = [];
+  'use strict';
+
+  var Spinner, Template, GestureDetector;
   var _clientHeight;
   var VALUE_ELEMENT_HEIGHT = 20;
 
-  suiteSetup(function() {
+  suiteSetup(function(done) {
+
     // override native clientHeight
     _clientHeight = Object.getOwnPropertyDescriptor(
       Element.prototype, 'clientHeight');
@@ -22,19 +21,21 @@ suite('Spinner', function() {
       }
     });
 
-    // create empty noop methods for GestureDetector and Template
-    ['GestureDetector', 'Template'].forEach(function(method) {
-      if (!window[method]) {
-        created.push(method);
-        window[method] = function() {};
-      }
-    });
+    testRequire(['picker/spinner', 'mocks/mock_template', 'mocks/mock_gesture_detector'], {
+        mocks: [
+          { name: 'template', path: 'mock/smock_template' },
+          { name: 'gesture-detector', path: 'mocks/mock_gesture_detector' }
+        ]
+      }, function(spinner, mockTemplate, mockGD) {
+        Spinner = spinner;
+        Template = mockTemplate;
+        GestureDetector = mockGD;
+        done();
+      });
   });
+
   suiteTeardown(function() {
     Object.defineProperty(Element.prototype, 'clientHeight', _clientHeight);
-    created.forEach(function(method) {
-      delete window[method];
-    });
   });
 
   setup(function() {
@@ -47,21 +48,6 @@ suite('Spinner', function() {
     this.container.appendChild(this.element);
     document.body.appendChild(this.container);
     this.clock = this.sinon.useFakeTimers();
-
-    // stub out our GestureDector and Template to do what we want
-    var sandbox = this.sinon;
-    sandbox.stub(window, 'GestureDetector', function(element) {
-      this.element = element;
-      this.startDetecting = sandbox.spy();
-    });
-    sandbox.stub(window, 'Template', function(id) {
-      if (id !== 'picker-unit-tmpl') {
-        throw new Error('Only allowed Template is picker-unit-tmpl');
-      }
-      this.interpolate = sandbox.spy(function(data) {
-        return '<div class="picker-unit">' + data.unit + '</div>';
-      });
-    });
   });
 
   function checkTranslate(value) {
