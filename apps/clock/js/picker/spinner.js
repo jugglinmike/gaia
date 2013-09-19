@@ -1,6 +1,8 @@
-(function(exports) {
+define(function(require) {
   'use strict';
 
+  var Template = require('template');
+  var GestureDetector = require('gesture-detector');
   var SPEED_THRESHOLD = 0.3;
   var INERTIA_MULTIPLIER = 5;
 
@@ -201,5 +203,5 @@
 
   };
 
-  exports.Spinner = Spinner;
-}(this));
+  return Spinner;
+});

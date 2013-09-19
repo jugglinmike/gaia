@@ -1,7 +1,11 @@
-// outer IIFE
-(function(exports) {
+define(function(require) {
 'use strict';
 
+var Tabs = require('tabs');
+var View = require('view');
+var Panel = require('panel');
+var Timer = require('timer');
+var StopwatchPanel = require('stopwatch_panel');
 var rAF = mozRequestAnimationFrame || requestAnimationFrame;
 /**
  * Global Application event handling and paging
@@ -112,6 +116,6 @@ var App = {
   }
 };
 
-exports.App = App;
+return App;
 
-}(this));
+});
