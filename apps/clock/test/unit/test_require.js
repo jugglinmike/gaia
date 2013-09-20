@@ -1,6 +1,4 @@
-requireApp('clock/js/alameda.js');
-
-(function(exports) {
+require('clock/js/alameda.js', function() {
   'use strict';
 
   var ctxIdCount = 0;
@@ -48,7 +46,7 @@ requireApp('clock/js/alameda.js');
    * will be re-loaded for distinct calls. This context is returned in the
    * event that test authors need to do additional loading.
    */
-  exports.testRequire = function(modules, options, callback) {
+  this.testRequire = function(modules, options, callback) {
     var mocks = options && options.mocks;
     var map = {};
     var ctx;
@@ -75,4 +73,4 @@ requireApp('clock/js/alameda.js');
     return ctx;
   };
 
-}(this));
+}.bind(this));

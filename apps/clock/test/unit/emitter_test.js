@@ -1,7 +1,4 @@
-requireApp('clock/js/emitter.js', loaded);
-
-// since we need to generate tests using Emitter, we must wait for it to load
-function loaded() {
+testRequire(['emitter'], function(Emitter) {
   suite('Emitter', function() {
     // Create a Simple "sub-class"
     function Simple() {
@@ -292,4 +289,4 @@ function loaded() {
       });
     });
   });
-}
+});
