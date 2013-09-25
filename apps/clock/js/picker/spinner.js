@@ -1,8 +1,8 @@
 define(function(require) {
   'use strict';
 
-  var Template = require('template');
-  var GestureDetector = require('gesture_detector');
+  var Template = require('shared/js/template');
+  var GestureDetector = require('shared/js/gesture_detector');
 
   function calculateSpeed(previous, current) {
     var motion = (previous.y - current.y) / this.unitHeight;
