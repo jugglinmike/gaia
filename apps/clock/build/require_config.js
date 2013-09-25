@@ -1,11 +1,11 @@
 {
   appDir: '..',
-  baseUrl: 'js',
   dir: '../../../build_stage/clock',
-  mainConfigFile: '../js/startup.js',
+  mainConfigFile: '../js/require_config.js',
   paths: {
     prim: 'empty:'
   },
+  findNestedDependencies: true,
 /*
   wrap: {
     start: 'plog("@@@ START OF BUILD LAYER");',
@@ -14,7 +14,11 @@
 */
   modules: [
     {
-      name: 'startup'
+      name: 'startup',
+      exclude: ['../test/unit/mocks/mock_moz_alarm.js']
+    },
+    {
+      name: 'onring'
     }
   ],
 

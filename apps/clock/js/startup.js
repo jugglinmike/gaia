@@ -1,29 +1,3 @@
-requirejs.config({
-  baseUrl: 'js',
-  paths: {
-    shared: '../shared'
-  },
-  shim: {
-    'shared/js/template': {
-      exports: 'Template'
-    },
-    emitter: {
-      exports: 'Emitter'
-    },
-    'shared/js/gesture_detector': {
-      exports: 'GestureDetector'
-    },
-    'shared/js/async_storage': {
-      exports: 'asyncStorage'
-    },
-    'shared/js/l10n_date': ['shared/js/l10n']
-  }
-});
-
-define('l10n', ['shared/js/l10n'], function() {
-  return navigator.mozL10n;
-});
-
 define('startup', function(require) {
 'use strict';
 
@@ -69,4 +43,6 @@ require([
 
 });
 
-requirejs(['startup']);
+require(['require_config'], function() {
+  requirejs(['startup']);
+});

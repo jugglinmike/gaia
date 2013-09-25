@@ -1,7 +1,10 @@
 /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
+define('onring', function(require) {
 'use strict';
 
+var Utils = require('utils');
+var mozL10n = require('l10n');
 var _ = navigator.mozL10n.get;
 
 var RingView = {
@@ -225,4 +228,8 @@ var RingView = {
 };
 
 RingView.init();
+});
 
+requirejs(['require_config'], function() {
+  requirejs(['onring']);
+});
