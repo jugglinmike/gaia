@@ -1,10 +1,9 @@
 suite('Banner', function() {
-  var nml, Banner;
+  var Banner, mozL10n;
 
   suiteSetup(function(done) {
     // store timezone offset for fake timers
     var offset = (new Date()).getTimezoneOffset() * 60 * 1000;
-    nml = navigator.mozL10n;
 
     // The timestamp for "Tue Jul 16 2013 06:00:00" according to the local
     // system's time zone
@@ -22,10 +21,10 @@ suite('Banner', function() {
     // Instantiate the Banner once with an element
     this.noteElem = document.createElement('div');
 
-    testRequire(['banner', 'mocks/mock_navigator_mozl10n'],
+    testRequire(['banner', 'mocks/mock_shared/js/l10n'],
       function(banner, mockL10n) {
       Banner = banner;
-      navigator.mozL10n = MockL10n;
+      mozL10n = MockL10n;
 
       this.banner = new Banner(this.noteElem);
 
@@ -35,10 +34,6 @@ suite('Banner', function() {
 
   setup(function() {
     this.clock = this.sinon.useFakeTimers(this.sixAm);
-  });
-
-  suiteTeardown(function() {
-    navigator.mozL10n = nml;
   });
 
   suite('#show', function() {
@@ -55,7 +50,7 @@ suite('Banner', function() {
 
   suite('#render', function() {
     setup(function() {
-      this._ = this.sinon.spy(navigator.mozL10n, 'get');
+      this._ = this.sinon.spy(mozL10n, 'get');
     });
     test('minutes ahead', function() {
       // build banner
