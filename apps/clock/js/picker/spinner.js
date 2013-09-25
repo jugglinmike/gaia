@@ -2,20 +2,7 @@ define(function(require) {
   'use strict';
 
   var Template = require('template');
-  var GestureDetector = require('gesture-detector');
-  // units covered per millisecond threshold to kick off inertia
-  var SPEED_THRESHOLD = 0.01;
-
-  // max units covered by inertia
-  var INERTIA_MAXIMUM = 15;
-
-  // not the same as animation duration, this accounts for "slowing down",
-  // measured in miliseconds
-  var INERTIA_DURATION = 300;
-
-  // number of milliseconds after last motion without leting go
-  // we will select whatever is being "hovered" and cancel momentum
-  var DRAGGING_TIMEOUT = 200;
+  var GestureDetector = require('gesture_detector');
 
   function calculateSpeed(previous, current) {
     var motion = (previous.y - current.y) / this.unitHeight;
