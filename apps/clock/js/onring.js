@@ -233,7 +233,6 @@ var RingView = {
 RingView.init();
 });
 
-require.config({ baseUrl: 'js/' });
 requirejs(['require_config'], function() {
   requirejs(['onring']);
 });

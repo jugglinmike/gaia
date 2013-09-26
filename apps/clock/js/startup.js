@@ -1,4 +1,3 @@
-require.config({ baseUrl: 'js' });
 define('startup', function(require) {
 'use strict';
 
