@@ -13,29 +13,6 @@ marionette('Alarm Panel', function() {
     return val;
   }
 
-  // Set the value of a given input element. Encapsulates logic for setting
-  // "time" and "date" input elements (which is currently unsupported by
-  // Marionette).
-  function setValue(element, value) {
-    var type = element.getAttribute('type');
-    if (value instanceof Date) {
-      if (type === 'time') {
-        value = [value.getHours(), value.getMinutes(), value.getSeconds()]
-          .map(padZeros).join(':');
-      } else {
-        value = [
-            value.getMonth() + 1,
-            value.getDay(),
-            value.getFullYear()
-          ]
-          .map(padZeros).join('-');
-      }
-    }
-    element.client.executeScript(function(elem, value) {
-      elem.value = value;
-    }, [element, value]);
-  }
-
   setup(function() {
     alarm = new Alarm(client);
 
@@ -81,7 +58,7 @@ marionette('Alarm Panel', function() {
       var alarms;
 
       alarm.els.alarmNameInput.sendKeys(['coffee break']);
-      setValue(alarm.els.timeInput, twentyFromNow);
+      client.forms.fill(alarm.els.timeInput, twentyFromNow);
 
       alarm.submit();
 
@@ -106,7 +83,7 @@ marionette('Alarm Panel', function() {
       alarm.openForm();
 
       alarm.els.alarmNameInput.sendKeys(['quitting time']);
-      setValue(alarm.els.timeInput, thirtyFromNow);
+      client.forms.fill(alarm.els.timeInput, thirtyFromNow);
 
       alarm.submit();
 
@@ -153,7 +130,7 @@ marionette('Alarm Panel', function() {
       setup(function() {
         var alarms;
         alarm.els.alarmNameInput.sendKeys(['coffee break']);
-        setValue(alarm.els.timeInput, twentyFromNow);
+        client.forms.fill(alarm.els.timeInput, twentyFromNow);
 
         alarm.submit();
 
@@ -180,7 +157,7 @@ marionette('Alarm Panel', function() {
         );
 
         alarm.els.alarmNameInput.sendKeys([' delayed']);
-        setValue(alarm.els.timeInput, thirtyFromNow);
+        client.forms.fill(alarm.els.timeInput, thirtyFromNow);
 
         alarm.submit();
 
