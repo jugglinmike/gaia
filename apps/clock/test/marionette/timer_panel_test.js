@@ -25,7 +25,7 @@ marionette('Alarm Panel', function() {
 
     timer.navigate('alarm');
     timer.navigate('timer');
-    assert.ok(
+    assert(
       timer.els.timer.countdown.text(),
       [durationMs - 5000, durationMs],
       'maintains the correct time across panel naviations'

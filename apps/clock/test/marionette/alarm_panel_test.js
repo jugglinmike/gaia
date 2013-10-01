@@ -20,28 +20,44 @@ marionette('Alarm Panel', function() {
   });
 
   test('Clock interaction', function() {
-    assert.ok(alarm.els.analogClock.displayed(),
-      'analog clock is displayed');
-    assert.ok(!alarm.els.digitalClock.displayed(),
-      'digital clock is not displayed');
-    assert.ok(alarm.els.alarmFormBtn.displayed(),
-      '"New Alarm" button is displayed');
-    assert.ok(!alarm.els.alarmForm.displayed(),
-      'Alarm form is not displayed');
+    assert(
+      alarm.els.analogClock.displayed(),
+      'analog clock is displayed'
+    );
+    assert(
+      !alarm.els.digitalClock.displayed(),
+      'digital clock is not displayed'
+    );
+    assert(
+      alarm.els.alarmFormBtn.displayed(),
+      '"New Alarm" button is displayed'
+    );
+    assert(
+      !alarm.els.alarmForm.displayed(),
+      'Alarm form is not displayed'
+    );
 
     alarm.els.analogClock.tap();
 
-    assert.ok(!alarm.els.analogClock.displayed(),
-      'analog clock is not displayed after tap');
-    assert.ok(alarm.els.digitalClock.displayed(),
-      'digital clock is displayed after tap');
+    assert(
+      !alarm.els.analogClock.displayed(),
+      'analog clock is not displayed after tap'
+    );
+    assert(
+      alarm.els.digitalClock.displayed(),
+      'digital clock is displayed after tap'
+    );
 
     alarm.els.digitalClock.tap();
 
-    assert.ok(alarm.els.analogClock.displayed(),
-      'analog clock is displayed after tap');
-    assert.ok(!alarm.els.digitalClock.displayed(),
-      'digital clock is not displayed after tap');
+    assert(
+      alarm.els.analogClock.displayed(),
+      'analog clock is displayed after tap'
+    );
+    assert(
+      !alarm.els.digitalClock.displayed(),
+      'digital clock is not displayed after tap'
+    );
   });
 
   suite('Alarm interaction', function() {
@@ -68,11 +84,11 @@ marionette('Alarm Panel', function() {
       assert.hasTime(
         alarms[0].text(), twentyFromNow, 'Alarm time is rendered'
       );
-      assert.ok(
+      assert(
         alarms[0].text().indexOf('coffee break'),
         'Alarm title is rendered'
       );
-      assert.ok(
+      assert(
         alarm.els.countdownBanner.displayed(),
         'Countdown banner is displayed'
       );
@@ -95,7 +111,7 @@ marionette('Alarm Panel', function() {
         thirtyFromNow,
         'Newest alarm title is rendered first'
       );
-      assert.ok(
+      assert(
         alarms[0].text().indexOf('quitting time'),
         'Newest alarm title is rendered first'
       );
@@ -104,11 +120,11 @@ marionette('Alarm Panel', function() {
         twentyFromNow,
         'Previously-created alarm time is rendered second'
       );
-      assert.ok(
+      assert(
         alarms[1].text().indexOf('coffee break'),
         'Previously-created alarm title is rendered second'
       );
-      assert.ok(
+      assert(
         alarm.els.countdownBanner.displayed(),
         'Countdown banner is displayed'
       );
@@ -120,8 +136,10 @@ marionette('Alarm Panel', function() {
       client.waitFor(function() {
         return !alarm.els.alarmForm.displayed();
       });
-      assert.ok(alarm.els.panels.alarm.displayed(),
-        'Alarm panel is displayed');
+      assert(
+        alarm.els.panels.alarm.displayed(),
+        'Alarm panel is displayed'
+      );
     });
 
     suite('Alarm manipulation', function() {
@@ -163,7 +181,7 @@ marionette('Alarm Panel', function() {
 
         alarmItem = alarm.els.alarmListItemS[0];
 
-        assert.ok(
+        assert(
           alarmItem.text().indexOf('coffee break delayed') > -1,
           'Alarm description is updated'
         );
@@ -172,7 +190,7 @@ marionette('Alarm Panel', function() {
           thirtyFromNow,
           'Alarm time is updated'
         );
-        assert.ok(
+        assert(
           alarm.els.countdownBanner.displayed(),
           'Countdown banner is displayed'
         );
@@ -181,7 +199,7 @@ marionette('Alarm Panel', function() {
       test('toggling', function() {
         alarm.els.alarmEnablerS[0].tap();
 
-        assert.ok(
+        assert(
           !alarm.els.countdownBanner.displayed(),
           'Countdown banner is not displayed after disabling an alarm'
         );
