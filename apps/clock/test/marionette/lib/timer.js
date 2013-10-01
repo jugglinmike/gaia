@@ -17,9 +17,9 @@ Timer.prototype.launch = function() {
 };
 
 Timer.prototype.setDuration = function(hours, minutes, seconds) {
-  this._setSpinnerValue('hour', hours);
-  this._setSpinnerValue('minute', minutes);
-  this._setSpinnerValue('second', seconds);
+  setSpinnerValue.call(this, 'hour', hours);
+  setSpinnerValue.call(this, 'minute', minutes);
+  setSpinnerValue.call(this, 'second', seconds);
 };
 
 Timer.prototype.start = function() {
@@ -32,7 +32,7 @@ Timer.prototype.start = function() {
   });
 };
 
-Timer.prototype._getCenterEl = function(name) {
+function getCenterEl(name) {
   var containerEl = this.els.timer.spinner[name + 's'];
   var valEls = this.els.timer.spinner[name + 'S'];
   var size = containerEl.size();
@@ -51,25 +51,25 @@ Timer.prototype._getCenterEl = function(name) {
   });
 
   return closest;
-};
+}
 
-Timer.prototype._getSpinnerValue = function(name) {
-  return parseInt(this._getCenterEl(name).text(), 10);
-};
+function getSpinnerValue(name) {
+  return parseInt(getCenterEl.call(this, name).text(), 10);
+}
 
-Timer.prototype._setSpinnerValue = function(name, val) {
+function setSpinnerValue(name, val) {
   var a = this._actions;
   var flickAmt = MAXFLICK;
   var dir = -1;
   var current = -Infinity;
   var centerEl, size, prev, center;
 
-  if (this._getSpinnerValue(name) === val) {
+  if (getSpinnerValue.call(this, name) === val) {
     return;
   }
 
   do {
-    target = this._getCenterEl(name);
+    target = getCenterEl.call(this, name);
     size = target.size();
     center = {
       x: size.width / 2,
@@ -82,7 +82,7 @@ Timer.prototype._setSpinnerValue = function(name, val) {
     a.perform();
 
     prev = current;
-    current = this._getSpinnerValue(name);
+    current = getSpinnerValue.call(this, name);
 
     // If the most recent flick has passed over the target value, reverse
     // direction and decrease the flick strength.
@@ -91,9 +91,9 @@ Timer.prototype._setSpinnerValue = function(name, val) {
       dir *= -1;
     }
   } while (current !== val);
-};
+}
 
-// Used to sort array of numbers in _setSpinnerValue
+// Used to sort array of numbers in setSpinnerValue
 function compareNumbers(a, b) {
   return a - b;
 }

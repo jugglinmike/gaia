@@ -22,7 +22,7 @@ Alarm.prototype.waitForBanner = function() {
 
 Alarm.prototype.submit = function() {
   this.els.alarmDoneBtn.tap();
-  this._waitForSlideEnd(this.els.alarmForm);
+  this.waitForSlideEnd(this.els.alarmForm);
 };
 
 // Open the alarm form for the given alarm item. If unspecified, open the
@@ -31,5 +31,5 @@ Alarm.prototype.openForm = function(alarmItem) {
   var openButton = alarmItem || this.els.alarmFormBtn;
 
   openButton.tap();
-  this._waitForSlideEnd(this.els.alarmForm);
+  this.waitForSlideEnd(this.els.alarmForm);
 };

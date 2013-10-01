@@ -34,12 +34,12 @@ Clock.prototype.launch = function() {
   this.client.apps.launch(Clock.ORIGIN);
   this.client.apps.switchToApp(Clock.ORIGIN);
 
-  this.client.waitFor(this._ready.bind(this));
+  this.client.waitFor(ready.bind(this));
 };
 
-Clock.prototype._ready = function() {
+function ready() {
   return this.els.analogClock.displayed() || this.els.digitalClock.display();
-};
+}
 
 Clock.prototype.navigate = function(panelName) {
   var button, panel;
@@ -52,10 +52,10 @@ Clock.prototype.navigate = function(panelName) {
   }
 
   button.tap();
-  this._waitForSlideEnd(panel);
+  this.waitForSlideEnd(panel);
 };
 
-Clock.prototype._waitForSlideEnd = function(element) {
+Clock.prototype.waitForSlideEnd = function(element) {
   this.client.waitFor(function() {
     return element.scriptWith(function(element) {
       return !!element.className.match(/\bslide-(in|out)-(right|left)\b/);
