@@ -12,8 +12,19 @@ Object.keys(nodeAssert).forEach(function(key) {
   assert[key] = nodeAssert[key];
 });
 
-// Determine if the provided string contains a representation of the provided
-// time in some form.
+/**
+ * Assert the presence of a given time within a given string.
+ *
+ * Given the time 1:30 PM, the following strings would be accepted:
+ *
+ * - It is 13:30.
+ * - The time is now 01:30 pm.
+ * - At 1:30P.M. we will have a party.
+ *
+ * @param {String} str - The string to test.
+ * @param {Date} date - The time expected.
+ * @param {String} usrMsg - Message to display on failure.
+ */
 assert.hasTime = function(str, date, usrMsg) {
   var hours = date.getHours();
   var minutes = date.getMinutes();
@@ -50,6 +61,21 @@ assert.hasTime = function(str, date, usrMsg) {
   nodeAssert(timeRe.test(str), msg);
 };
 
+/*
+ * Assert the presence of a given duration within a given string.
+ *
+ * Given the duration 1002345, the following strings would be accepted:
+ *
+ * - Only 01:02 remaining!
+ * - In 1:02:34 we will dine.
+ *
+ * @param {String} str - The string to test.
+ * @param {Number|Array} ms - The expected duration in milliseconds. If an
+ *                            array, the first and second elements will be used
+ *                            as upper and lower bounds on the accepted
+ *                            duration (inclusive).
+ * @param {String} [usrMsg] - Message to display on failure.
+ */
 assert.hasDuration = function(str, ms, usrMsg) {
   var match = str.match(/(?:([0-9]+):)?([0-9]+):([0-9]+)(?:[:.]([0-9]+))?/);
   var time;
