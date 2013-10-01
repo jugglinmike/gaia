@@ -1,3 +1,5 @@
+mocha.setup({ globals: ['GestureDetector'] });
+
 suite('Spinner', function() {
   'use strict';
 
@@ -21,10 +23,14 @@ suite('Spinner', function() {
       }
     });
 
-    testRequire(['picker/spinner', 'mocks/mock_template', 'mocks/mock_gesture_detector'], {
+    testRequire([
+        'picker/spinner',
+        'mocks/mock_shared/js/template',
+        'mocks/mock_shared/js/gesture_detector'
+      ], {
         mocks: [
-          { name: 'template', path: 'mock/smock_template' },
-          { name: 'gesture-detector', path: 'mocks/mock_gesture_detector' }
+          'shared/js/template',
+          'shared/js/gesture_detector'
         ]
       }, function(spinner, mockTemplate, mockGD) {
         Spinner = spinner;
