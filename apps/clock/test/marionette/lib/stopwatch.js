@@ -1,14 +1,14 @@
 var Clock = require('./clock');
 
-function Timer(client) {
+function Stopwatch(client) {
   Clock.apply(this, arguments);
 }
 
-module.exports = Timer;
+module.exports = Stopwatch;
 
-Timer.prototype = Object.create(Clock.prototype);
+Stopwatch.prototype = Object.create(Clock.prototype);
 
-Timer.prototype.launch = function() {
+Stopwatch.prototype.launch = function() {
   Clock.prototype.launch.call(this);
   this.navigate('stopwatch');
 };
