@@ -32,7 +32,7 @@ marionette('Alarm Panel', function() {
     );
   });
 
-  test('pausing and restarting', function(done) {
+  test('pausing and restarting', function() {
     var pausedValue;
 
     // This is a long-running test because it specifically requires the passage
@@ -45,32 +45,30 @@ marionette('Alarm Panel', function() {
     timer.els.timer.pauseBtn.tap();
     pausedValue = timer.els.timer.countdown.text();
 
-    setTimeout(function() {
-      assert.equal(
-        pausedValue,
-        timer.els.timer.countdown.text(),
-        'Timer does not advance after being paused'
-      );
+    client.helper.wait(1200);
 
-      timer.els.timer.resumeBtn.tap();
+    assert.equal(
+      pausedValue,
+      timer.els.timer.countdown.text(),
+      'Timer does not advance after being paused'
+    );
 
-      setTimeout(function() {
-        assert.notEqual(
-          pausedValue,
-          timer.els.timer.countdown.text(),
-          'Timer advances after being paused'
-        );
+    timer.els.timer.resumeBtn.tap();
 
-        timer.els.timer.cancelBtn.tap();
+    client.helper.wait(1200);
 
-        // Ensure create timer form is eventually made visible
-        client.waitFor(function() {
-          return timer.els.timer.createBtn.displayed();
-        });
+    assert.notEqual(
+      pausedValue,
+      timer.els.timer.countdown.text(),
+      'Timer advances after being paused'
+    );
 
-        done();
-      }, 1200);
-    }, 1200);
+    timer.els.timer.cancelBtn.tap();
+
+    // Ensure create timer form is eventually made visible
+    client.waitFor(function() {
+      return timer.els.timer.createBtn.displayed();
+    });
   });
 
 });

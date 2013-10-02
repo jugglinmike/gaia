@@ -9,7 +9,7 @@ marionette('Alarm Panel', function() {
     stopwatch.launch();
   });
 
-  test('basic operation', function(done) {
+  test('basic operation', function() {
     assert.hasDuration(
       stopwatch.els.stopwatch.timeDisplay.text(),
       0,
@@ -22,17 +22,15 @@ marionette('Alarm Panel', function() {
       'Start button is not displayed while stopwatch advances'
     );
 
-    setTimeout(function() {
-      assert.hasDuration(
-        stopwatch.els.stopwatch.timeDisplay.text(),
-        [1000, 2000]
-      );
+    client.helper.wait(1200);
 
-      done();
-    }, 1200);
+    assert.hasDuration(
+      stopwatch.els.stopwatch.timeDisplay.text(),
+      [1000, 2000]
+    );
   });
 
-  test('lap creation', function(done) {
+  test('lap creation', function() {
 
     assert.equal(
       stopwatch.els.stopwatch.lapS.length,
@@ -62,17 +60,15 @@ marionette('Alarm Panel', function() {
       'Immediately-created lap displays 0 time'
     );
 
-    setTimeout(function() {
-      stopwatch.els.stopwatch.lapBtn.tap();
+    client.helper.wait(1200);
 
-      assert.hasDuration(
-        stopwatch.els.stopwatch.lapS[0].text(),
-        [1000, 2000],
-        'New laps are inserted at the beginning of the lap list'
-      );
+    stopwatch.els.stopwatch.lapBtn.tap();
 
-      done();
-    }, 1200);
+    assert.hasDuration(
+      stopwatch.els.stopwatch.lapS[0].text(),
+      [1000, 2000],
+      'New laps are inserted at the beginning of the lap list'
+    );
   });
 
   test('resetting', function() {
