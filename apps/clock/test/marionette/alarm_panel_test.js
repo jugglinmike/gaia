@@ -64,8 +64,8 @@ marionette('Alarm Panel', function() {
     var twentyFromNow, thirtyFromNow;
 
     setup(function() {
-      twentyFromNow = Clock.fromNow(1000 * 60 * 20);
-      thirtyFromNow = Clock.fromNow(1000 * 60 * 30);
+      twentyFromNow = alarm.fromNow(1000 * 60 * 20);
+      thirtyFromNow = alarm.fromNow(1000 * 60 * 30);
 
       alarm.openForm();
     });

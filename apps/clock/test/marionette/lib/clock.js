@@ -23,11 +23,21 @@ module.exports = Clock;
 
 Clock.ORIGIN = 'app://clock.gaiamobile.org';
 
-// Create a Date object whose value is the supplied number of milliseconds from
-// the current system time.
-Clock.fromNow = function(ms) {
+/**
+ * Create a Date object whose value is the supplied number of milliseconds from
+ * the current system time.
+ *
+ * @param {Number} ms - The number of milliseconds from the current time to
+ *                      create the Date. Optional (defaults to 0). May be
+ *                      negative.
+ * @return {Date}
+ */
+Clock.prototype.fromNow = function(ms) {
   ms = ms || 0;
-  return new Date(Date.now() + ms);
+  ms += this.client.executeScript(function() {
+    return Date.now();
+  });
+  return new Date(ms);
 };
 
 Clock.prototype.launch = function() {
