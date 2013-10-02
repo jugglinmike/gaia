@@ -5,14 +5,6 @@ marionette('Alarm Panel', function() {
   var client = marionette.client();
   var alarm;
 
-  function padZeros(val) {
-    val = String(val);
-    while (val.length < 2) {
-      val = '0' + val;
-    }
-    return val;
-  }
-
   setup(function() {
     alarm = new Alarm(client);
 
