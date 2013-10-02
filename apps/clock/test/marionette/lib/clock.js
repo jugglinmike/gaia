@@ -48,7 +48,7 @@ Clock.prototype.launch = function() {
 };
 
 function ready() {
-  return this.els.analogClock.displayed() || this.els.digitalClock.display();
+  return this.els.analogClock.displayed() || this.els.digitalClock.displayed();
 }
 
 Clock.prototype.navigate = function(panelName) {
