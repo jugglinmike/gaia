@@ -12,43 +12,31 @@ marionette('Alarm Panel', function() {
   });
 
   test('Clock interaction', function() {
-    assert(
-      alarm.els.analogClock.displayed(),
-      'analog clock is displayed'
-    );
-    assert(
-      !alarm.els.digitalClock.displayed(),
-      'digital clock is not displayed'
-    );
-    assert(
-      alarm.els.alarmFormBtn.displayed(),
-      '"New Alarm" button is displayed'
-    );
-    assert(
-      !alarm.els.alarmForm.displayed(),
-      'Alarm form is not displayed'
-    );
+    assert(alarm.analogClockDisplayed, 'analog clock is displayed');
+    assert(!alarm.digitalClockDisplayed, 'digital clock is not displayed');
+    assert(alarm.openFormBtnDisplayed, '"New Alarm" button is displayed');
+    assert(!alarm.formDisplayed, 'Alarm form is not displayed');
 
-    alarm.els.analogClock.tap();
+    alarm.toggleClock();
 
     assert(
-      !alarm.els.analogClock.displayed(),
-      'analog clock is not displayed after tap'
+      !alarm.analogClockDisplayed,
+      'analog clock is not displayed after toggle'
     );
     assert(
-      alarm.els.digitalClock.displayed(),
-      'digital clock is displayed after tap'
+      alarm.digitalClockDisplayed,
+      'digital clock is displayed after toggle'
     );
 
-    alarm.els.digitalClock.tap();
+    alarm.toggleClock();
 
     assert(
-      alarm.els.analogClock.displayed(),
-      'analog clock is displayed after tap'
+      alarm.analogClockDisplayed,
+      'analog clock is displayed after toggle'
     );
     assert(
-      !alarm.els.digitalClock.displayed(),
-      'digital clock is not displayed after tap'
+      !alarm.digitalClockDisplayed,
+      'digital clock is not displayed after toggle'
     );
   });
 
@@ -65,69 +53,63 @@ marionette('Alarm Panel', function() {
     test('Creation', function() {
       var alarms;
 
-      alarm.els.alarmNameInput.sendKeys(['coffee break']);
-      client.forms.fill(alarm.els.timeInput, twentyFromNow);
+      alarm.fill({
+        name: 'coffee break',
+        time: twentyFromNow
+      });
 
-      alarm.submit();
+      alarm.formSubmit();
 
-      alarms = alarm.els.alarmListItemS;
+      alarms = alarm.items();
 
       assert.equal(alarms.length, 1);
       assert.hasTime(
-        alarms[0].text(), twentyFromNow, 'Alarm time is rendered'
+        alarms[0], twentyFromNow, 'Alarm time is rendered'
       );
       assert(
-        alarms[0].text().indexOf('coffee break'),
+        alarms[0].indexOf('coffee break'),
         'Alarm title is rendered'
       );
-      assert(
-        alarm.els.countdownBanner.displayed(),
-        'Countdown banner is displayed'
-      );
+      assert(alarm.countdownBannerDisplayed, 'Countdown banner is displayed');
 
       this.timeout(Alarm.bannerTimeout);
       alarm.waitForBanner();
 
       alarm.openForm();
 
-      alarm.els.alarmNameInput.sendKeys(['quitting time']);
-      client.forms.fill(alarm.els.timeInput, thirtyFromNow);
+      alarm.fill({
+        name: 'quitting time',
+        time: thirtyFromNow
+      });
 
-      alarm.submit();
+      alarm.formSubmit();
 
-      alarms = alarm.els.alarmListItemS;
+      alarms = alarm.items();
 
       assert.equal(alarms.length, 2);
       assert.hasTime(
-        alarms[0].text(),
+        alarms[0],
         thirtyFromNow,
         'Newest alarm title is rendered first'
       );
       assert(
-        alarms[0].text().indexOf('quitting time'),
+        alarms[0].indexOf('quitting time'),
         'Newest alarm title is rendered first'
       );
       assert.hasTime(
-        alarms[1].text(),
+        alarms[1],
         twentyFromNow,
         'Previously-created alarm time is rendered second'
       );
       assert(
-        alarms[1].text().indexOf('coffee break'),
+        alarms[1].indexOf('coffee break'),
         'Previously-created alarm title is rendered second'
       );
-      assert(
-        alarm.els.countdownBanner.displayed(),
-        'Countdown banner is displayed'
-      );
+      assert(alarm.countdownBannerDisplayed, 'Countdown banner is displayed');
     });
 
     test('Closing form', function() {
-      alarm.els.alarmFormCloseBtn.tap();
-
-      client.waitFor(function() {
-        return !alarm.els.alarmForm.displayed();
-      });
+      alarm.formClose();
       assert(
         alarm.els.panels.alarm.displayed(),
         'Alarm panel is displayed'
@@ -139,78 +121,79 @@ marionette('Alarm Panel', function() {
 
       setup(function() {
         var alarms;
-        alarm.els.alarmNameInput.sendKeys(['coffee break']);
-        client.forms.fill(alarm.els.timeInput, twentyFromNow);
 
-        alarm.submit();
+        alarm.fill({
+          name: 'coffee break',
+          time: twentyFromNow
+        });
+
+        alarm.formSubmit();
 
         // Ensure the banner is hidden before the tests continue because it
         // obscures the alarm list
         this.timeout(Alarm.bannerTimeout);
         alarm.waitForBanner();
 
-        alarmItem = alarm.els.alarmListItemS[0];
+        alarmItem = alarm.items()[0];
       });
 
       test('updating', function() {
-        alarm.openForm(alarmItem);
+        var vals;
+
+        alarm.openForm(0);
+        vals = alarm.readForm('name', 'time');
 
         assert.equal(
-          alarm.els.alarmNameInput.getAttribute('value'),
+          vals.name,
           'coffee break',
           'Alarm name input field is pre-populated with current value'
         );
         assert.hasTime(
-          alarm.els.timeInput.getAttribute('value'),
+          vals.time,
           twentyFromNow,
           'Alarm time input field is pre-populated with current value'
         );
 
-        alarm.els.alarmNameInput.sendKeys([' delayed']);
-        client.forms.fill(alarm.els.timeInput, thirtyFromNow);
+        alarm.fill({
+          name: 'quitting time',
+          time: thirtyFromNow
+        });
 
-        alarm.submit();
+        alarm.formSubmit();
 
-        alarmItem = alarm.els.alarmListItemS[0];
+        alarmItem = alarm.items()[0];
 
         assert(
-          alarmItem.text().indexOf('coffee break delayed') > -1,
+          alarmItem.indexOf('quitting time') > -1,
           'Alarm description is updated'
         );
-        assert.hasTime(
-          alarmItem.text(),
-          thirtyFromNow,
-          'Alarm time is updated'
-        );
+        assert.hasTime(alarmItem, thirtyFromNow, 'Alarm time is updated');
         assert(
-          alarm.els.countdownBanner.displayed(),
+          alarm.countdownBannerDisplayed,
           'Countdown banner is displayed'
         );
       });
 
       test('toggling', function() {
-        alarm.els.alarmEnablerS[0].tap();
+        alarm.toggleAlarm(0);
 
         assert(
-          !alarm.els.countdownBanner.displayed(),
+          !alarm.countdownBannerDisplayed,
           'Countdown banner is not displayed after disabling an alarm'
         );
 
-        alarm.els.alarmEnablerS[0].tap();
+        alarm.toggleAlarm(0);
 
         client.waitFor(function() {
-          return alarm.els.countdownBanner.displayed();
+          return alarm.countdownBannerDisplayed;
         });
       });
 
       test('deletion', function() {
-        alarm.openForm(alarmItem);
-        alarm.els.alarmDeleteBtn.tap();
-        client.waitFor(function() {
-          return !alarm.els.alarmForm.displayed();
-        });
+        alarm.openForm(0);
+        alarm.formDelete();
         assert.equal(
-          alarm.els.alarmListItemS.length,
+          alarm.items().length,
           0,
           'deleted alarm is removed from the alarm list'
         );
