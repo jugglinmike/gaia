@@ -49,13 +49,7 @@ function stripCssComments(contents) {
 
 requirejs.tools.useLib(function(require) {
   require(['env!env/file', 'parse'], function(file, parse) {
-    // Remove the loader tag from the index.html file
-    var indexPath = buildDir + 'index.html';
-    file.saveFile(indexPath, file.readFile(indexPath)
-                             .replace(/data-loader="[^"]+"/, ''));
-
-    var jsExtRegExp = /\.js$/,
-        backendRegExp = /[\\\/]js[\\\/]ext[\\\/]/;
+    var jsExtRegExp = /\.js$/;
 
     // Find all the HTML and JS files.
     var files = file.getFilteredFileList(buildDir + 'js', /\.js$|\.html$/);
@@ -63,7 +57,7 @@ requirejs.tools.useLib(function(require) {
       var contents = file.readFile(fileName);
 
       // If JS, scan for shared resources.
-      if (jsExtRegExp.test(fileName) && !backendRegExp.test(fileName)) {
+      if (jsExtRegExp.test(fileName)) {
         var deps = parse.findDependencies(fileName, contents);
         deps.forEach(function(dep) {
           if (dep.indexOf('shared/') === 0) {

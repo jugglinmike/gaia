@@ -7,12 +7,7 @@
     prim: 'empty:'
   },
   findNestedDependencies: true,
-/*
-  wrap: {
-    start: 'plog("@@@ START OF BUILD LAYER");',
-    end: 'plog("@@@ END OF BUILD LAYER");'
-  },
-*/
+
   modules: [
     {
       name: 'startup'
