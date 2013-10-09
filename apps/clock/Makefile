@@ -24,7 +24,7 @@ all: $(BUILD_DIR)/js/startup.js
 clean:
 	rm -rf $(BUILD_DIR)
 
-$(BUILD_DIR)/js/startup.js: manifest.webapp index.html $(AUTOCONFIG_SOURCES) $(JS_SOURCES) $(LOCALES_SOURCES) $(SOUNDS_SOURCES) $(STYLE_SOURCES) $(SHARED_SOURCES) $(BUILD_SOURCES)
+$(BUILD_DIR)/js/startup.js: manifest.webapp index.html onring.html $(AUTOCONFIG_SOURCES) $(JS_SOURCES) $(LOCALES_SOURCES) $(SOUNDS_SOURCES) $(STYLE_SOURCES) $(SHARED_SOURCES) $(BUILD_SOURCES)
 	@rm -rf $(BUILD_DIR)
 	@mkdir -p $(BUILD_DIR)
 	cp -rp ../../shared $(BUILD_DIR)/shared
