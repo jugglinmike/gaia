@@ -3,8 +3,6 @@ suite('Timer', function() {
   var now, duration;
 
   suiteSetup(function(done) {
-    loadBodyHTML('/index.html');
-
     testRequire(['timer'], function(timer) {
       Timer = timer;
       done();
