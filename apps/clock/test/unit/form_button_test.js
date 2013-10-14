@@ -13,7 +13,6 @@ suite('FormButton', function() {
         done();
       }
     );
-    loadBodyHTML('/index.html');
   });
 
   suite('basic functions', function() {
