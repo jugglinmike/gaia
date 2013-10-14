@@ -1,4 +1,5 @@
 suite('ClockView', function() {
+  var nativeMozAlarms = navigator.mozAlarms;
   var ClockView;
   var AlarmList;
   var asyncStorage;
@@ -8,25 +9,45 @@ suite('ClockView', function() {
     // system's time zone
     this.sixAm = new Date(2013, 5, 16, 6).getTime();
 
-    // Load before clock_view to ensure elements are initialized properly.
-    loadBodyHTML('/index.html');
-
     testRequire([
-      'clock_view',
-      'mocks/mock_alarm_list',
-      'mocks/mock_shared/js/async_storage'
+        'panels/alarm/main',
+        'panels/alarm/clock_view',
+        'mocks/mock_panels/alarm/alarm_list',
+        'mocks/mock_shared/js/async_storage',
+        'mocks/mock_moz_alarm'
       ], {
-        mocks: ['alarm_list', 'shared/js/async_storage']
-      }, function(clockView, mockAlarmList, mockAsyncStorage) {
+        mocks: [
+          'panels/alarm/alarm_list',
+          'shared/js/async_storage',
+          'panels/alarm/active_alarm'
+        ]
+      }, function(
+          AlarmPanel,
+          clockView,
+          mockAlarmList,
+          mockAsyncStorage,
+          mockMozAlarms
+        ) {
+        navigator.mozAlarms = new mockMozAlarms.MockMozAlarms();
+
+        AlarmList = mockAlarmList;
+
+        // Instantiate an Alarm Panel to ensure that elements are initialized
+        // properly
+        var div = document.createElement('div');
+        document.body.appendChild(div);
+        new AlarmPanel(div);
+
         ClockView = clockView;
         AlarmList = mockAlarmList;
 
         asyncStorage = mockAsyncStorage;
-
-        ClockView.init();
-        AlarmList.init();
         done();
       });
+  });
+
+  suiteTeardown(function() {
+    navigator.mozAlarms = nativeMozAlarms;
   });
 
   test('ClockView.isInitialized ', function() {
