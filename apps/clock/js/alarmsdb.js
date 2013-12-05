@@ -7,11 +7,29 @@ var BaseIndexDB = function(objectStoreOptions) {
   this.query = function ad_query(dbName, storeName, func, callback, data) {
     var indexedDB = window.indexedDB || window.webkitIndexedDB ||
         window.mozIndexedDB || window.msIndexedDB;
+    var toMigrate = [];
 
     var request = indexedDB.open(dbName, 6);
 
     request.onsuccess = function(event) {
-      func(request.result, storeName, callback, data);
+      var transaction;
+
+      if (toMigrate.length) {
+        var db = event.target.result;
+        console.log('Migrating ' + toMigrate.length + ' alarms');
+        transaction = db.transaction(storeName, 'readwrite');
+        store = transaction.objectStore(storeName);
+        for (var idx = 0, len = toMigrate.length; idx < len; ++idx) {
+          store.put(toMigrate[idx]);
+        }
+        transaction.oncomplete = function() {
+          console.log('Migration complete');
+          func(request.result, storeName, callback, data);
+        };
+      } else {
+        console.log('No migration necessary');
+        func(request.result, storeName, callback, data);
+      }
     };
 
     request.onerror = function(event) {
@@ -21,9 +39,30 @@ var BaseIndexDB = function(objectStoreOptions) {
     // DB init
     request.onupgradeneeded = function(event) {
       console.log('Upgrading db');
-      var db = event.target.result;
-      if (db.objectStoreNames.contains(storeName))
+      var db = event.target.result,
+          transaction = event.target.transaction;
+      var migrateRequest;
+      if (db.objectStoreNames.contains(storeName)) {
+        console.log('Contains store named "' + storeName + '"');
+
+        console.log('Grabbing current alarms...');
+        migrateRequest = transaction.objectStore(storeName).openCursor();
+        migrateRequest.onsuccess = function(event) {
+          var cursor = event.target.result;
+          if (cursor) {
+            console.log('Found alarm');
+            toMigrate.push(convertTo12(cursor.value));
+            cursor.continue();
+          } else {
+            console.log('Done grabbing alarms.');
+          }
+        };
+
+        console.log('deleting store');
         db.deleteObjectStore(storeName);
+      } else {
+        console.log('Does not contain. Doing nothing.');
+      }
       db.createObjectStore(storeName, objectStoreOptions);
       console.log('Upgrading db done');
     };
